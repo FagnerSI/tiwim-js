@@ -1,48 +1,42 @@
 import React, { Component } from 'react';
 import {
-  PageHeader,
-  Menu,
   Button,
-  Tag,
-  Icon,
   Empty,
-  Row,
-  Typography,
-  Divider,
-  List,
-  Popconfirm,
-  Skeleton
+  Icon,
+  Input,
+  Menu,
+  Modal,
+  PageHeader,
+  Select,
+  Tooltip,
 } from 'antd';
-import moment from 'moment';
-import 'moment/locale/pt-br';
+
+import ProjectDetails from '~/components/ProjectDetails';
 import './style.css';
 import 'antd/dist/antd.css';
 
-const { Paragraph } = Typography;
+
+const { TextArea } = Input;
+const { Option } = Select;
 
 type Props = {
-  onloadProject: () => void;
-}
-
-function randomColor() {
-  const colors = [
-    "magenta",
-    "red",
-    "volcano",
-    "orange",
-    "gold",
-    "green",
-    "cyan",
-    "blue",
-    "geekblue",
-    "purple",
-  ]
-  return colors[Math.floor(Math.random() * 10)];
+  onloadProject: () => void,
+  onCreateProject: () => void,
 }
 
 class Main extends Component<Props> {
   state = {
     current: '0',
+    visible: false,
+  };
+
+
+  onToggleModal = () => {
+    const { visible } = this.state;
+    !visible && this.props.loadUsers();
+    this.setState({
+      visible: !visible,
+    });
   };
 
   onSelectProject = e => {
@@ -56,31 +50,61 @@ class Main extends Component<Props> {
   onDeleteProject = () => {
     this.props.onDeleteProject()
     this.setState({
-      current: '0',
+      current: 0,
     });
   }
 
+
+  onChangeName(name) {
+    this.setState({
+      name
+    })
+  }
+
+  onChangeDesc(description) {
+    this.setState({
+      description
+    })
+  }
+
+  onChangeSelect = (users) => {
+    this.setState({
+      users
+    })
+  }
+
+  onCreateProject = () => {
+    const { name, description, users } = this.state;
+    this.props.onCreateProject({ name, description, users })
+    this.onToggleModal();
+  }
+
+
   render() {
-    const { projects, project } = this.props;
+    const { projects, users, project } = this.props;
     return (
       <div className="container">
         <div className="left-container">
 
-          <span className="menu-title">
-            <Button type="primary" style={{ fontSize: '15px' }}>
-              <Icon type="plus" />
-            </Button>
+          <div className="menu-title">
+            <Tooltip placement="bottomLeft" title="Criar Projeto">
+              <Button
+                type="primary"
+                className="project-plus"
+                onClick={this.onToggleModal}
+              >
+                <Icon type="plus" />
+              </Button>
+            </Tooltip>
             <span style={{ padding: "0 10px" }}>Projetos</span>
-          </span>
+          </div>
 
           <div className="menu-itens">
             <Menu
               onClick={this.onSelectProject}
-              defaultSelectedKeys={['2']}
-              selectedKeys={this.state.current}
+              selectedKeys={[this.state.current]}
               mode="inline"
             >
-
               {
                 projects && projects.length
                   ? (
@@ -88,100 +112,81 @@ class Main extends Component<Props> {
                       <Menu.Item key={index}>{project.name}</Menu.Item>
                     ))
                   )
-                  : <Empty style={{ padding: '30px 0' }} description="Você não possui projetos." />
+                  : <Empty style={{ padding: '50px 0' }} description="Você não possui projetos." />
               }
             </Menu>
           </div>
 
-          <div className="go-top">
+          {/*  <div className="go-top">
             <Icon type="caret-up" />
-          </div>
+          </div> */}
 
         </div>
+
         <div className="right-container">
           <PageHeader
             title={<span style={{ color: '#fff' }}>TiWIM</span>}
-            // tags={<Tag color="blue">Running</Tag>}
             extra={[
-              <Button key="1" type="primary">
+              <Button
+                key="1"
+                className="user-btn"
+                type="primary"
+              >
                 <Icon type="user" style={{ fontSize: '25px' }} />
               </Button>
             ]}
             className="header"
           />
-
           <div className="content">
-
-            <div className="project-details">
-              {
-                project && project.roles && (
-                  <PageHeader
-                    title={project.name}
-                    subTitle={
-                      <div style={{ paddingTop: '4px', fontSize: '11px' }}>
-                        {`criado em ${moment(project.created_at).format('DD/MM/YYYY')}`}
-                      </div>
-                    }
-                    extra={[
-                      <Button type="primary" ghost key="2"><Icon type="edit" /></Button>,
-                      <Popconfirm
-                        placement="bottomRight"
-                        title={`Deseja excluir o projeto ${project.name}?`}
-                        onConfirm={this.onDeleteProject}
-                        okText="Sim"
-                        cancelText="Não"
-                      >
-                        <Button
-                          type="danger" key="3">
-                          <Icon type="delete" />
-                        </Button>
-                      </Popconfirm>
-                      ,
-                    ]}
-                  >
-                    <Paragraph >
-                      {project.description}
-                    </Paragraph>
-                    <div className="roles">
-                      {/*  <b>Papeis:</b> */}
-                      {
-                        project.roles.map((item) => <Tag color={randomColor()} > {item.name}</Tag>)
-                      }
-                    </div>
-                    <Divider />
-
-                  </PageHeader>
-                )
-              }
-              <List
-                className="demo-loadmore-list"
-                // loading={initLoading}
-                itemLayout="horizontal"
-                // loadMore={loadMore}
-                dataSource={project.topics}
-                renderItem={item => (
-                  <a href="https://ant.design">
-                    <List.Item
-                    //actions={[<a href="http://google.com">edit</a>, <a href="list-loadmore-more">more</a>]}
-                    >
-                      <List.Item.Meta
-                        title={item.title}
-                        description={`${item.description.substring(0, 130)}...`}
-                      />
-                      {/* <div>content</div> */}
-                    </List.Item>
-                  </a>
-                )}
-              />
-
-            </div>
-
-
+            {
+              project && (
+                <ProjectDetails
+                  project={project}
+                  onDeleteProject={this.onDeleteProject}
+                />
+              )
+            }
           </div>
 
         </div>
 
-      </div >
+        <Modal
+          title="Criar Projeto"
+          visible={this.state.visible}
+          onOk={this.onCreateProject}
+          okText="Criar"
+          onCancel={this.onToggleModal}
+        >
+          <Input
+            name="title"
+            required
+            allowClear
+            placeholder="Titulo para projeto"
+            onChange={e => this.onChangeName(e.target.value)}
+          />
+          <div style={{ margin: '24px 0' }} />
+          <TextArea
+            name="description"
+            placeholder="Descrição do projeto"
+            autosize={{ minRows: 3, maxRows: 6 }}
+            onChange={e => this.onChangeDesc(e.target.value)}
+          />
+          <div style={{ margin: '24px 0' }} />
+
+          <Select
+            mode="multiple"
+            allowClear
+            style={{ width: '100%' }}
+            placeholder="Selecione convidados"
+            onChange={this.onChangeSelect}
+          >
+            {
+              //ASSIM NÃO DÁ
+              users.map(user => <Option key={user.id}>{user.email}</Option>)
+            }
+          </Select>
+        </Modal>
+      </div>
     );
   }
 }

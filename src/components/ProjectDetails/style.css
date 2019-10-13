@@ -1,0 +1,25 @@
+.project_info {
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.date {
+  padding-top: 4px;
+  font-size: 11px;
+}
+
+.roles {
+  padding: 5px;
+}
+
+.topic_list {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 1rem;
+  color: #333;
+}
+
+.list_container {
+  overflow: auto;
+  max-height: 15rem;
+  margin: 0 20px;
+}
