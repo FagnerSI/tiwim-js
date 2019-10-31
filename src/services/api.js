@@ -1,9 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'http://localhost:8000/v1';
-/* const headers = {
-    'Access-Control-Allow-Origin': 'Authorization'
-} */
+const baseURL = 'http://tiwim-api.herokuapp.com/v1';
 
 const api = axios.create({ baseURL });
 

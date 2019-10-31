@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { message } from 'antd';
-import Main from './Main';
+import Home from './Home';
 
 import api from '~/services/api';
 
-// import { Container } from './styles';
-
-export default class MainContainer extends Component {
+export default class HomeContainer extends Component {
 
     state = {
         project: null,
@@ -14,16 +12,16 @@ export default class MainContainer extends Component {
         users: [],
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.loadProjects();
     }
 
-    loadProjects = async () => {
+    loadProjects = async (index = 0) => {
 
         const response = await api.get('/projects');
         this.setState({
             projects: response.data,
-            project: response.data[0],
+            project: response.data[index],
         })
     }
 
@@ -49,7 +47,6 @@ export default class MainContainer extends Component {
         } catch {
             message.error('Erro ao tentar criar projeto');
         }
-
     }
 
     onDeleteProject = async () => {
@@ -63,13 +60,27 @@ export default class MainContainer extends Component {
         }
     }
 
+    onCreateTopic = async (topic) => {
+        try {
+            const newTopic = {
+                project: this.state.project.id,
+                ...topic,
+            };
+            await api.post(`/topics`, newTopic);
+            message.success('Topico criado com sucesso.');
+        } catch {
+            message.error('Erro ao tentar criar topico.');
+        }
+    }
+
     render() {
         return (
-            <Main
+            <Home
                 {...this.state}
                 onSelectProject={this.onSelectProject}
                 onCreateProject={this.onCreateProject}
                 onDeleteProject={this.onDeleteProject}
+                onCreateTopic={this.onCreateTopic}
                 loadUsers={this.loadUsers}
             />
         );

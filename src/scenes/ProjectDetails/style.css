@@ -12,7 +12,10 @@
 }
 
 .topic_list {
-  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.5em;
+  font-size: 18px;
   font-weight: 600;
   margin: 1rem;
   color: #333;

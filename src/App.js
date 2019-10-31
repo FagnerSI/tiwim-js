@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import Main from '~/screens/Main';
+import Routers from '~/screens/routes';
 
 
 class App extends Component {
 
   render() {
     return (
-      <Main />
+      <Routers />
     );
   }
 }

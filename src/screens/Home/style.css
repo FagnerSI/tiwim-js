@@ -1,0 +1,25 @@
+.project-header {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.btn-primary {
+  height: auto;
+  text-shadow: none;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  border-radius: 50%;
+  padding: 2px 8px;
+  font-size: 20px;
+}
+
+.user-btn {
+  height: auto;
+  text-shadow: none;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  border-radius: 50%;
+  padding: 4px 7px;
+}

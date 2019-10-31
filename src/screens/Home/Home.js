@@ -6,15 +6,15 @@ import {
   Input,
   Menu,
   Modal,
-  PageHeader,
   Select,
   Tooltip,
 } from 'antd';
 
-import ProjectDetails from '~/components/ProjectDetails';
+import ProjectDetails from '~/scenes/ProjectDetails';
+import MainLayout from '~/components/MainLayout';
+import Header from '~/components/Header';
 import './style.css';
 import 'antd/dist/antd.css';
-
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -24,12 +24,11 @@ type Props = {
   onCreateProject: () => void,
 }
 
-class Main extends Component<Props> {
+class Home extends Component<Props> {
   state = {
     current: '0',
     visible: false,
   };
-
 
   onToggleModal = () => {
     const { visible } = this.state;
@@ -44,16 +43,14 @@ class Main extends Component<Props> {
       current: e.key,
     });
     this.props.onSelectProject(e.key)
-
   };
 
   onDeleteProject = () => {
-    this.props.onDeleteProject()
     this.setState({
-      current: 0,
+      current: '0',
     });
+    this.props.onDeleteProject()
   }
-
 
   onChangeName(name) {
     this.setState({
@@ -79,77 +76,78 @@ class Main extends Component<Props> {
     this.onToggleModal();
   }
 
+  renderLeftHeader() {
+    return (
+      <div className='project-header'>
+        <Tooltip placement="bottomLeft" title="Novo Projeto">
+          <Button
+            type="primary"
+            className="btn-primary"
+            onClick={this.onToggleModal}
+          >
+            <Icon type="plus" />
+          </Button>
+        </Tooltip>
+        <span style={{ padding: "0 10px" }}>Projetos</span>
+      </div>
+    );
+  }
+
+  renderLeftChild() {
+    const { projects } = this.props;
+    return (
+      <Menu
+        onClick={this.onSelectProject}
+        selectedKeys={[this.state.current]}
+        mode="inline"
+      >
+        {
+          projects && projects.length
+            ? (
+              projects.map((project, index) => (
+                <Menu.Item key={index}>{project.name}</Menu.Item>
+              ))
+            )
+            : <Empty style={{ padding: '50px 0' }} description="Você não possui projetos." />
+        }
+      </Menu>
+    )
+  }
+
+  renderRightHeader() {
+    return (
+      <Header />
+    )
+  }
+
+  renderRightChild() {
+    const { users, project } = this.props;
+    return (
+      <>
+        {
+          project && (
+            <ProjectDetails
+              project={project}
+              users={users}
+              onDeleteProject={this.onDeleteProject}
+              {...this.props}
+            />
+          )
+        }
+      </>
+    )
+  }
 
   render() {
-    const { projects, users, project } = this.props;
+    const { users } = this.props;
     return (
-      <div className="container">
-        <div className="left-container">
-
-          <div className="menu-title">
-            <Tooltip placement="bottomLeft" title="Criar Projeto">
-              <Button
-                type="primary"
-                className="project-plus"
-                onClick={this.onToggleModal}
-              >
-                <Icon type="plus" />
-              </Button>
-            </Tooltip>
-            <span style={{ padding: "0 10px" }}>Projetos</span>
-          </div>
-
-          <div className="menu-itens">
-            <Menu
-              onClick={this.onSelectProject}
-              selectedKeys={[this.state.current]}
-              mode="inline"
-            >
-              {
-                projects && projects.length
-                  ? (
-                    projects.map((project, index) => (
-                      <Menu.Item key={index}>{project.name}</Menu.Item>
-                    ))
-                  )
-                  : <Empty style={{ padding: '50px 0' }} description="Você não possui projetos." />
-              }
-            </Menu>
-          </div>
-
-          {/*  <div className="go-top">
-            <Icon type="caret-up" />
-          </div> */}
-
-        </div>
-
-        <div className="right-container">
-          <PageHeader
-            title={<span style={{ color: '#fff' }}>TiWIM</span>}
-            extra={[
-              <Button
-                key="1"
-                className="user-btn"
-                type="primary"
-              >
-                <Icon type="user" style={{ fontSize: '25px' }} />
-              </Button>
-            ]}
-            className="header"
-          />
-          <div className="content">
-            {
-              project && (
-                <ProjectDetails
-                  project={project}
-                  onDeleteProject={this.onDeleteProject}
-                />
-              )
-            }
-          </div>
-
-        </div>
-
+      <>
+        <MainLayout
+          leftHeader={this.renderLeftHeader()}
+          leftChild={this.renderLeftChild()}
+          rightHeader={this.renderRightHeader()}
+          rightChild={this.renderRightChild()}
+        />
         <Modal
           title="Criar Projeto"
           visible={this.state.visible}
@@ -186,8 +184,8 @@ class Main extends Component<Props> {
             }
           </Select>
         </Modal>
-      </div>
+      </>
     );
   }
 }
-export default Main;
+export default Home;

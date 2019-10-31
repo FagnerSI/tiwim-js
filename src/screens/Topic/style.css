@@ -1,0 +1,17 @@
+.topic-details {
+  display: flex;
+  flex-direction: column;
+  text-align: justify;
+  padding: 15px;
+}
+
+.topic-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  color: #333;
+}
+
+.topic-desc {
+  margin: 2em 0;
+}
