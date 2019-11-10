@@ -28,6 +28,7 @@
 .right-container {
   height: 100vh;
   width: 75%;
+  min-width: 400px;
 }
 
 .rigth-header {

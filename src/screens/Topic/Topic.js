@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import Text from 'react-format-text';
-import {
-  Button,
-  Icon,
-} from 'antd';
+import { Divider } from 'antd';
 import moment from 'moment';
 import 'moment/locale/pt-br';
-import Header from '~/components/Header';
-import MainLayout from '~/components/MainLayout';
+import { Button, Header, MainLayout } from '~/components';
+import Replay from './Replay';
 import './style.css';
 
 class Topic extends Component {
@@ -21,14 +18,14 @@ class Topic extends Component {
     const { history } = this.props;
     return (
       <div className='project-header'>
-
         <Button
-          type="primary"
-          className="btn-primary"
+          placement="bottomLeft"
+          tooltipTitle="Ir para Home"
+          btnType="primary"
+          styleComponent="btn-primary"
+          icon="arrow-left"
           onClick={history.goBack}
-        >
-          <Icon type="arrow-left" />
-        </Button>
+        />
         <span style={{ padding: "0 10px" }}>Voltar</span>
       </div>
     );
@@ -47,22 +44,45 @@ class Topic extends Component {
     )
   }
 
-
   renderRightHeader() {
     return (
       <Header />
     )
   }
 
+  rightChild() {
+    const { replays } = this.props.topic;
+
+    return (
+      <div>
+        <Divider orientation="left"><span className="replays-title">Respostas</span></Divider>
+        {
+          replays
+          && (replays.map(replay => <Replay replay={replay} />))
+        }
+
+        <Button
+          placement="bottomLeft"
+          tooltipTitle="Novo Projeto"
+          btnType="primary"
+          styleComponent="btn-primary btn-new-replay"
+          icon="plus"
+          onClick={this.onToggleModal}
+        />
+      </div>
+    )
+  }
+
   render() {
-    const { topic } = this.props;
+    const { topic, loading } = this.props;
     if (!topic) return null;
     return (
       <MainLayout
         leftHeader={this.renderLeftHeader()}
         leftChild={this.renderLeftChild()}
         rightHeader={this.renderRightHeader()}
-      /* rightChild={this.renderRightChild()} */
+        rightChild={this.rightChild()}
+        loading={loading}
       />
     );
   }

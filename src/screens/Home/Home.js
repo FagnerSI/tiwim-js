@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
 import {
-  Button,
   Empty,
-  Icon,
   Input,
   Menu,
   Modal,
   Select,
-  Tooltip,
 } from 'antd';
 
-import ProjectDetails from '~/scenes/ProjectDetails';
+import ProjectDetails from './ProjectDetails';
 import MainLayout from '~/components/MainLayout';
-import Header from '~/components/Header';
+import { Button, Header } from '~/components';
 import './style.css';
 import 'antd/dist/antd.css';
 
@@ -74,20 +71,22 @@ class Home extends Component<Props> {
     const { name, description, users } = this.state;
     this.props.onCreateProject({ name, description, users })
     this.onToggleModal();
+    this.setState({
+      current: `${this.props.projects.length}`,
+    });
   }
 
   renderLeftHeader() {
     return (
       <div className='project-header'>
-        <Tooltip placement="bottomLeft" title="Novo Projeto">
-          <Button
-            type="primary"
-            className="btn-primary"
-            onClick={this.onToggleModal}
-          >
-            <Icon type="plus" />
-          </Button>
-        </Tooltip>
+        <Button
+          placement="bottomLeft"
+          tooltipTitle="Novo Projeto"
+          btnType="primary"
+          styleComponent="btn-primary"
+          icon="plus"
+          onClick={this.onToggleModal}
+        />
         <span style={{ padding: "0 10px" }}>Projetos</span>
       </div>
     );
@@ -129,7 +128,7 @@ class Home extends Component<Props> {
             <ProjectDetails
               project={project}
               users={users}
-              onDeleteProject={this.onDeleteProject}
+              onDelete={this.onDeleteProject}
               {...this.props}
             />
           )
@@ -139,7 +138,7 @@ class Home extends Component<Props> {
   }
 
   render() {
-    const { users } = this.props;
+    const { users, loading } = this.props;
     return (
       <>
         <MainLayout
@@ -147,6 +146,7 @@ class Home extends Component<Props> {
           leftChild={this.renderLeftChild()}
           rightHeader={this.renderRightHeader()}
           rightChild={this.renderRightChild()}
+          loading={loading}
         />
         <Modal
           title="Criar Projeto"

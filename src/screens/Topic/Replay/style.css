@@ -1,0 +1,56 @@
+.replay-card {
+  max-width: 80%;
+  min-width: 350px;
+  border: 1.5px solid #e3e3e3;
+  background-color: #fff;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.card-header {
+  display: flex;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.card-header .kind-speech {
+  text-align: center;
+  border-radius: 4px 0 0;
+  margin-right: 24px;
+  padding: 8px;
+  font-weight: 500;
+  color: #fff;
+  background-color: #254869b4;
+  width: 180px;
+  box-sizing: border-box;
+}
+
+.card-header .user-replay {
+  display: flex;
+  width: 100%;
+  font-size: 15px;
+  font-weight: 600;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.card-body .roles {
+  font-size: 14px;
+}
+
+.card-body .role-in {
+  width: 180px;
+  margin-right: 30px;
+}
+
+.card-body .desc {
+  margin: 8px 0;
+  font-size: 14px;
+}

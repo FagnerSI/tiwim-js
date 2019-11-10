@@ -23,3 +23,11 @@
   border-radius: 50%;
   padding: 4px 7px;
 }
+
+.load-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}

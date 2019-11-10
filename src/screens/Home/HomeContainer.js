@@ -1,3 +1,4 @@
+/* eslint-disable no-sequences */
 import React, { Component } from 'react';
 import { message } from 'antd';
 import Home from './Home';
@@ -7,9 +8,10 @@ import api from '~/services/api';
 export default class HomeContainer extends Component {
 
     state = {
-        project: null,
         projects: [],
         users: [],
+        project: null,
+        loading: true,
     }
 
     componentWillMount() {
@@ -17,11 +19,11 @@ export default class HomeContainer extends Component {
     }
 
     loadProjects = async (index = 0) => {
-
         const response = await api.get('/projects');
         this.setState({
             projects: response.data,
             project: response.data[index],
+            loading: false,
         })
     }
 
@@ -40,13 +42,15 @@ export default class HomeContainer extends Component {
     }
 
     onCreateProject = async (project) => {
-        try {
-            await api.post(`/projects`, project);
-            message.success('Projeto criado com sucesso.');
-            this.loadProjects();
-        } catch {
-            message.error('Erro ao tentar criar projeto');
-        }
+        await api.post(`/projects`, project)
+            .then(
+                (result) => (
+                    message.success('Projeto criado com sucesso.'),
+                    this.loadProjects(this.state.projects.length),
+                    console.log("→→→→→", result)
+                ),
+                (result, error) => (message.error('Erro ao tentar criar projeto'), console.log("→→→→→", result)),
+            )
     }
 
     onDeleteProject = async () => {

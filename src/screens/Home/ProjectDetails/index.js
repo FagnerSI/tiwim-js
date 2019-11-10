@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {
-    Button,
-    Icon,
     Input,
     List,
     Modal,
@@ -10,8 +8,9 @@ import {
     Popconfirm,
     Select,
     Tag,
-    Tooltip,
 } from 'antd';
+
+import { Button } from '~/components';
 import randomColor from '~/common/randomTagColor';
 import moment from 'moment';
 import 'moment/locale/pt-br';
@@ -62,27 +61,33 @@ export default class ProjectDetails extends Component {
 
     renderEditButton(action) {
         return (
-            <Tooltip placement="top" title="Editar">
-                <Button type="primary" ghost key="1"><Icon type="edit" /></Button>
-            </Tooltip>
+            <Button
+                placement="top"
+                tooltipTitle="Editar"
+                btnType="primary"
+                ghost
+                icon="edit"
+            />
         )
     }
 
     renderDeleteButton(name) {
         return (
-            <Tooltip placement="top" title="Excluir">
-                <Popconfirm
-                    placement="bottomRight"
-                    title={`Deseja realmente excluir?`}
-                    onConfirm={this.props.onDeleteProject}
-                    okText="Sim"
-                    cancelText="Não"
-                >
-                    <Button type="danger" ghost key="2">
-                        <Icon type="delete" />
-                    </Button>
-                </Popconfirm>
-            </Tooltip >
+            <Popconfirm
+                placement="bottomRight"
+                title={`Deseja realmente excluir?`}
+                onConfirm={this.props.onDelete}
+                okText="Sim"
+                cancelText="Não"
+            >
+                <Button
+                    placement="top"
+                    tooltipTitle="Editar"
+                    btnType="danger"
+                    ghost
+                    icon="delete"
+                />
+            </Popconfirm>
         )
     }
 
@@ -98,7 +103,7 @@ export default class ProjectDetails extends Component {
     renderTags() {
         const roles = this.props.project.roles || [];
         return (
-            <div className="roles">
+            <div className="projetc-roles">
                 {roles.map((item) => <Tag color={randomColor()}>{item.name}</Tag>)}
             </div>
         )
@@ -124,15 +129,14 @@ export default class ProjectDetails extends Component {
                 </PageHeader>
                 <div className="topic_list">
                     <span>Lista de Topicos</span>
-                    <Tooltip placement="topLeft" title="Novo Topico">
-                        <Button
-                            type="primary"
-                            className="btn-primary"
-                            onClick={this.onToggleModal}
-                        >
-                            <Icon type="plus" />
-                        </Button>
-                    </Tooltip>
+                    <Button
+                        placement="topLeft"
+                        tooltipTitle="Novo Topico"
+                        btnType="primary"
+                        styleComponent="btn-primary"
+                        onClick={this.onToggleModal}
+                        icon="plus"
+                    />
                 </div>
                 <div className="list_container">
                     <List

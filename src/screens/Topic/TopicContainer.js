@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { message } from 'antd';
 import Topic from './Topic';
 
 import api from '~/services/api';
@@ -8,6 +7,7 @@ export default class TopicContainer extends Component {
 
     state = {
         topic: {},
+        loading: true,
     }
 
     componentWillMount() {
@@ -20,6 +20,7 @@ export default class TopicContainer extends Component {
             const response = await api.get(`/topics/${id}`);
             this.setState({
                 topic: response.data,
+                loading: false,
             });
         } catch{ }
     }

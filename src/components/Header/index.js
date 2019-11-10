@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Icon } from 'antd';
+import { Button } from '~/components';
 
 import './style.css';
 
@@ -9,12 +9,12 @@ export default class Header extends Component {
             <div className="header">
                 <span>TiWIM</span>
                 <Button
-                    type="primary"
-                    className="btn-primary"
-                    onClick={this.onToggleModal}
-                >
-                    <Icon type="user" />
-                </Button>
+                    placement="bottomRight"
+                    tooltipTitle="Configurações"
+                    btnType="primary"
+                    styleComponent="btn-primary"
+                    icon="user"
+                />
             </div>
         )
     }

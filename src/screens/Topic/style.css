@@ -15,3 +15,16 @@
 .topic-desc {
   margin: 2em 0;
 }
+
+.btn-new-replay {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  font-size: 30px;
+  padding: 3px 10px;
+}
+
+.replays-title {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.65);
+}
