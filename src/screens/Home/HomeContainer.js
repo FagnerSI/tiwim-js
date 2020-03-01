@@ -1,30 +1,41 @@
 /* eslint-disable no-sequences */
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { connect } from 'react-redux';
+import getProjects, { GET_PROJECTS_SUCCESS } from '~/store/getProjects/action';
 import { message } from 'antd';
 import Home from './Home';
 
 import api from '~/services/api';
 
-export default class HomeContainer extends Component {
+
+class HomeContainer extends Component {
 
     state = {
         projects: [],
         users: [],
         project: null,
-        loading: true,
     }
 
     componentWillMount() {
-        this.loadProjects();
+        this.onLoadProjects();
     }
 
-    loadProjects = async (index = 0) => {
-        const response = await api.get('/projects');
-        this.setState({
-            projects: response.data,
-            project: response.data[index],
-            loading: false,
-        })
+    componentDidUpdate(prevProps) {
+        const { projects } = this.props;
+        (() => {
+            if (projects.type === prevProps.projects.type) return;
+            if (projects.type === GET_PROJECTS_SUCCESS) {
+                const { payload } = projects;
+                this.setState({
+                    projects: payload,
+                    project: payload[0],
+                })
+            };
+        })();
+    }
+
+    onLoadProjects = (index = 0) => {
+        this.props.dispatch(getProjects());
     }
 
     loadUsers = async () => {
@@ -46,10 +57,9 @@ export default class HomeContainer extends Component {
             .then(
                 (result) => (
                     message.success('Projeto criado com sucesso.'),
-                    this.loadProjects(this.state.projects.length),
-                    console.log("→→→→→", result)
+                    this.onLoadProjects(this.state.projects.length)
                 ),
-                (result, error) => (message.error('Erro ao tentar criar projeto'), console.log("→→→→→", result)),
+                (result, error) => (message.error('Erro ao tentar criar projeto')),
             )
     }
 
@@ -78,9 +88,11 @@ export default class HomeContainer extends Component {
     }
 
     render() {
+        const loading = this.props.projects.loading;
         return (
             <Home
                 {...this.state}
+                loading={loading}
                 onSelectProject={this.onSelectProject}
                 onCreateProject={this.onCreateProject}
                 onDeleteProject={this.onDeleteProject}
@@ -90,3 +102,11 @@ export default class HomeContainer extends Component {
         );
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        projects: state.getProjects,
+    }
+}
+
+export default connect(mapStateToProps)(HomeContainer);
