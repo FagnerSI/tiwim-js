@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const dev = true;
+const dev = false;
 
-const baseURL = dev ? 'http://localhost:8000/v1/' : 'http://tiwim-api.herokuapp.com/v1';
+const baseURL = dev ? process.env.REACT_APP_API_URL : 'http://tiwim-api.herokuapp.com/v1';
 
 const api = axios.create({ baseURL });
 
