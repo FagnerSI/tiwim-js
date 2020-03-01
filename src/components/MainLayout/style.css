@@ -35,10 +35,6 @@
   display: flex;
   align-items: center;
   height: 3.5rem;
-  padding: 15px 25px;
-  color: #fff;
-  background-color: #1890ff;
-  border-right: 1px solid #58aeff;
 }
 
 .right-child {
