@@ -24,6 +24,12 @@
   padding: 3px 10px;
 }
 
+.replays-container {
+  overflow: scroll;
+  height: calc(100% - 3.5rem);
+  margin-right: -12px;
+}
+
 .replays-title {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.65);

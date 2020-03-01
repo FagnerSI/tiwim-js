@@ -54,13 +54,12 @@ class Topic extends Component {
     const { replays } = this.props.topic;
 
     return (
-      <div>
+      <div className="replays-container">
         <Divider orientation="left"><span className="replays-title">Respostas</span></Divider>
         {
           replays
           && (replays.map(replay => <Replay replay={replay} />))
         }
-
         <Button
           placement="bottomLeft"
           tooltipTitle="Novo Projeto"
