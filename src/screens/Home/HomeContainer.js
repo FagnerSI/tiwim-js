@@ -1,7 +1,9 @@
 /* eslint-disable no-sequences */
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import createProject, { CREATE_PROJECT_SUCCESS } from '~/store/createProject/action';
 import getProjects, { GET_PROJECTS_SUCCESS } from '~/store/getProjects/action';
+import getUsers, { GET_USERS_SUCCESS } from '~/store/getUsers/action';
 import { message } from 'antd';
 import Home from './Home';
 
@@ -21,7 +23,7 @@ class HomeContainer extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { projects } = this.props;
+        const { projects, users, project } = this.props;
         (() => {
             if (projects.type === prevProps.projects.type) return;
             if (projects.type === GET_PROJECTS_SUCCESS) {
@@ -32,17 +34,27 @@ class HomeContainer extends Component {
                 })
             };
         })();
+
+        (() => {
+            if (users.type === prevProps.users.type) return;
+            if (users.type === GET_USERS_SUCCESS) {
+                const { payload } = users;
+                this.setState({
+                    users: payload,
+                })
+            };
+        })();
+
+        (() => {
+            if (project.type === prevProps.project.type) return;
+            if (project.type === CREATE_PROJECT_SUCCESS) {
+                this.onLoadProjects(this.state.projects.length)
+            };
+        })();
     }
 
     onLoadProjects = (index = 0) => {
         this.props.dispatch(getProjects());
-    }
-
-    loadUsers = async () => {
-        const response = await api.get('/users');
-        this.setState({
-            users: response.data,
-        })
     }
 
     onSelectProject = (id) => {
@@ -52,15 +64,12 @@ class HomeContainer extends Component {
         })
     }
 
-    onCreateProject = async (project) => {
-        await api.post(`/projects`, project)
-            .then(
-                (result) => (
-                    message.success('Projeto criado com sucesso.'),
-                    this.onLoadProjects(this.state.projects.length)
-                ),
-                (result, error) => (message.error('Erro ao tentar criar projeto')),
-            )
+    onLoadUsers = () => {
+        this.props.dispatch(getUsers());
+    }
+
+    onCreateProject = (project) => {
+        this.props.dispatch(createProject(project));
     }
 
     onDeleteProject = async () => {
@@ -97,7 +106,7 @@ class HomeContainer extends Component {
                 onCreateProject={this.onCreateProject}
                 onDeleteProject={this.onDeleteProject}
                 onCreateTopic={this.onCreateTopic}
-                loadUsers={this.loadUsers}
+                loadUsers={this.onLoadUsers}
             />
         );
     }
@@ -106,6 +115,8 @@ class HomeContainer extends Component {
 function mapStateToProps(state) {
     return {
         projects: state.getProjects,
+        users: state.getUsers,
+        project: state.createProject,
     }
 }
 
