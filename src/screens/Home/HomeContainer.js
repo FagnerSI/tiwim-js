@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import createProject, { CREATE_PROJECT_SUCCESS } from '~/store/createProject/action';
+import deleteProject from '~/store/deleteProject/action';
 import getProjects, { GET_PROJECTS_SUCCESS } from '~/store/getProjects/action';
 import getUsers, { GET_USERS_SUCCESS } from '~/store/getUsers/action';
 import { message } from 'antd';
@@ -72,15 +73,10 @@ class HomeContainer extends Component {
         this.props.dispatch(createProject(project));
     }
 
-    onDeleteProject = async () => {
-        try {
-            await api.delete(`/projects/${this.state.project.id}`);
-            message.success('Projeto removido com sucesso.');
-            this.loadProjects();
-        }
-        catch {
-            message.error('Erro ao tentar remover projeto');
-        }
+    onDeleteProject = () => {
+        const projectId = this.state.project.id;
+        this.props.dispatch(deleteProject(projectId));
+        this.onLoadProjects();
     }
 
     onCreateTopic = async (topic) => {
