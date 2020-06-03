@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './style.css';
-import kindSpeechs from '~/common/kind_speechs';
+import kindSpeechs from '~/common/kindSpeechs';
 
 export default class Replay extends Component {
 

@@ -1,11 +1,11 @@
-.container {
+.main-container {
   display: flex;
 }
 
 .left-container {
   height: 100vh;
   width: 25%;
-  min-width: 12rem;
+  min-width: 16rem;
   box-sizing: border-box;
 }
 
@@ -20,7 +20,7 @@
 }
 
 .left-child {
-  height: calc(100% - 3.5rem);
+  height: calc(100vh - 3.5rem);
   border-right: 1px solid #e8e8e8;
   overflow: auto;
 }
@@ -38,7 +38,7 @@
 }
 
 .right-child {
-  height: 100%;
+  height: calc(100vh - 3.5rem);
   background-color: #fafafa;
   box-sizing: border-box;
   padding: 16px;

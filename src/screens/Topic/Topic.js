@@ -22,7 +22,7 @@ class Topic extends Component {
           placement="bottomLeft"
           tooltipTitle="Ir para Home"
           btnType="primary"
-          styleComponent="btn-primary"
+          styleComponent="btn-circle-icon"
           icon="arrow-left"
           onClick={history.goBack}
         />
@@ -64,7 +64,7 @@ class Topic extends Component {
           placement="bottomLeft"
           tooltipTitle="Novo Projeto"
           btnType="primary"
-          styleComponent="btn-primary btn-new-replay"
+          styleComponent="btn-circle-icon btn-new-replay"
           icon="plus"
           onClick={this.onToggleModal}
         />

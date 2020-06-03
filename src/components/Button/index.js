@@ -1,21 +1,20 @@
 import React from 'react';
 import {
     Button,
-    Icon,
     Tooltip,
 } from 'antd';
 
 const MyButton = (props) => {
-    const { placement, tooltipTitle, btnTitle, btnType, onClick, icon, ghost, styleComponent } = props;
+    const { placement, tooltipTitle, btnTitle, btnType, onClick, ghost, icon, className } = props;
     return (
         <Tooltip placement={placement} title={tooltipTitle}>
             <Button
                 type={btnType}
-                className={styleComponent || ''}
+                className={className || ''}
                 onClick={onClick}
                 ghost={ghost}
+                icon={icon}
             >
-                <Icon type={icon} />
                 {btnTitle}
             </Button>
         </Tooltip >

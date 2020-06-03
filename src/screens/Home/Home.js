@@ -61,15 +61,15 @@ class Home extends Component<Props> {
     })
   }
 
-  onChangeSelect = (users) => {
+  onChangeSelect = (members) => {
     this.setState({
-      users
+      members
     })
   }
 
   onCreateProject = () => {
-    const { name, description, users } = this.state;
-    this.props.onCreateProject({ name, description, users })
+    const { name, description, members } = this.state;
+    this.props.onCreateProject({ name, description, members })
     this.onToggleModal();
     this.setState({
       current: `${this.props.projects.length}`,
@@ -83,7 +83,7 @@ class Home extends Component<Props> {
           placement="bottomLeft"
           tooltipTitle="Novo Projeto"
           btnType="primary"
-          styleComponent="btn-primary"
+          className="btn-circle-icon"
           icon="plus"
           onClick={this.onToggleModal}
         />

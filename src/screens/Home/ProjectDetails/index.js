@@ -133,7 +133,7 @@ export default class ProjectDetails extends Component {
                         placement="topLeft"
                         tooltipTitle="Novo Topico"
                         btnType="primary"
-                        styleComponent="btn-primary"
+                        styleComponent="btn-circle-icon"
                         onClick={this.onToggleModal}
                         icon="plus"
                     />

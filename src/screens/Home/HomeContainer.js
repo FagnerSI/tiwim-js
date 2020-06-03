@@ -9,7 +9,6 @@ import getUsers, { GET_USERS_SUCCESS } from '~/store/getUsers/action';
 import Home from './Home';
 
 
-
 class HomeContainer extends Component {
 
     state = {
