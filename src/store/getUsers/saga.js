@@ -6,7 +6,7 @@ import { GET_USERS_REQUEST, success, failure } from './action';
 
 function* getUsers() {
     try {
-        let { data } = yield call(api.get, `/users`);
+        let { data } = yield call(api.get, `/accounts`);
         yield put(success(data));
     } catch (error) {
         yield put(failure("Nenhum usuário foi encontrado!"));

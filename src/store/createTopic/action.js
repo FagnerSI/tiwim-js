@@ -13,6 +13,6 @@ export function failure(error) {
     return { type: CREATE_TOPIC_FAILURE, payload: error }
 }
 
-export default function createTOPIC(topic) {
+export default function createTopic(topic) {
     return { type: CREATE_TOPIC_REQUEST, payload: topic }
 }
