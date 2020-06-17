@@ -25,10 +25,12 @@ class Login extends Component {
 
     onOpenLogin = value => {
         this.setState({ isCreateAccount: false });
+        this.props.form.resetFields()
     };
 
     onOpenCreateAccount = value => {
         this.setState({ isCreateAccount: true });
+        this.props.form.resetFields()
     };
 
     onChange = value => {
@@ -76,16 +78,14 @@ class Login extends Component {
                     <div className="login-logo-container" >
                         <img src={logo_h} className="login-logo" alt="Logo da plataforma" />
                     </div>
-                    <Form colon={false} >
+                    <Form colon={false}>
                         {isCreateAccount &&
                             (<Form.Item label="Nome">
                                 {getFieldDecorator('name', {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: 'Digite seu nome'
-                                        }
-                                    ],
+                                    rules: [{
+                                        required: true,
+                                        message: 'Digite seu nome'
+                                    }],
                                 }
                                 )(
                                     <Input

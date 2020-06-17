@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Dropdown, Menu } from 'antd';
 
+import { Link } from 'react-router-dom';
+
 import './style.css';
 
 import {
@@ -15,11 +17,8 @@ class Header extends Component {
         return (
             <Menu>
                 <Menu.Item>
-                    <Button
-                        type="link"
-                        onClick={() => this.props.dispatch(logout())}
-                    >
-                        Sair
+                    <Button type="link" onClick={() => this.props.dispatch(logout())}>
+                        <Link to={`login`}>Sair</Link>
                     </Button>
                 </Menu.Item>
             </Menu>)

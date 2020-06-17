@@ -32,7 +32,6 @@ class LoginContainer extends Component {
     }
 
     render() {
-        console.log("==========", this.props.authentication)
         return <Login onLogin={this.onLogin} onCreateAccount={this.onCreateAccount} />;
     }
 }

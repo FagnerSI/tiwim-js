@@ -17,7 +17,7 @@ export default class TopicContainer extends Component {
     loadTopic = async () => {
         const { id } = this.props.match.params;
         try {
-            const response = await api.get(`/topics/${id}`);
+            const response = await api().get(`/topics/${id}`);
             this.setState({
                 topic: response.data,
                 loading: false,

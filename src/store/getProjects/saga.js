@@ -6,7 +6,7 @@ import { GET_PROJECTS_REQUEST, success, failure } from './action';
 
 function* getProjects() {
     try {
-        let { data } = yield call(api.get, `/projects`);
+        let { data } = yield call(api().get, `/projects`);
         yield put(success(data));
     } catch (error) {
         yield put(failure("Nenhum Projeto foi encontrado!"));

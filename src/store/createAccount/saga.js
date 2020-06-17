@@ -6,7 +6,7 @@ import { CREATE_ACCOUNT_REQUEST, success, failure } from './action';
 
 function* createAccount({ payload }) {
     try {
-        let { data } = yield call(api.post, `/accounts`, payload);
+        let { data } = yield call(api().post, `/accounts`, payload);
         yield put(success(data));
     } catch (error) {
         yield put(failure("Não foi possivél criar sua conta!"));

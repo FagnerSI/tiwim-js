@@ -7,10 +7,24 @@
 
 .btn-circle-icon {
   border-radius: 100%;
-  /*  text-shadow: none;
-  box-shadow: none; */
   font-size: 22px;
   background-color: #0285ff;
+}
+
+.tag-roles-container > * {
+  margin-bottom: 10px;
+}
+
+.tag-roles {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.input-tag-roles {
+  padding: 6px 10px;
+  max-width: 130px;
 }
 
 .user-btn {

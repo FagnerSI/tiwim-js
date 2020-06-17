@@ -1,8 +1,9 @@
 import axios from 'axios';
 
-const baseURL = process.env.REACT_APP_API_URL;
-const token = localStorage.getItem('@AuthToken');
-const headers = { 'Authorization': `Token ${token}` }
-const api = axios.create({ baseURL, headers });
+export default function api() {
+    const baseURL = process.env.REACT_APP_API_URL;
+    let token = localStorage.getItem('@AuthToken');
+    let headers = token && { 'Authorization': `Token ${token}` };
 
-export default api;
+    return axios.create({ baseURL, headers });
+};

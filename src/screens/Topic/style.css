@@ -20,8 +20,10 @@
   position: fixed;
   right: 20px;
   bottom: 20px;
+}
+
+.btn-new-replay svg {
   font-size: 30px;
-  padding: 3px 10px;
 }
 
 .replays-container {

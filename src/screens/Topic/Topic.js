@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Text from 'react-format-text';
-import { Divider } from 'antd';
+import { Button, Divider, Tooltip } from 'antd';
 import moment from 'moment';
 import 'moment/locale/pt-br';
-import { Button, Header, MainLayout } from '~/components';
+import { Header, MainLayout } from '~/components';
 import Replay from './Replay';
 import './style.css';
 
@@ -14,18 +14,18 @@ class Topic extends Component {
   };
 
   renderLeftHeader() {
-
     const { history } = this.props;
+
     return (
       <div className='project-header'>
-        <Button
-          placement="bottomLeft"
-          tooltipTitle="Ir para Home"
-          btnType="primary"
-          styleComponent="btn-circle-icon"
-          icon="arrow-left"
-          onClick={history.goBack}
-        />
+        <Tooltip placement="bottomLeft" title="Ir para Home">
+          <Button
+            type="primary"
+            className="btn-circle-icon"
+            icon="arrow-left"
+            onClick={history.goBack}
+          />
+        </Tooltip>
         <span style={{ padding: "0 10px" }}>Voltar</span>
       </div>
     );
@@ -60,14 +60,15 @@ class Topic extends Component {
           replays
           && (replays.map(replay => <Replay replay={replay} />))
         }
-        <Button
-          placement="bottomLeft"
-          tooltipTitle="Novo Projeto"
-          btnType="primary"
-          styleComponent="btn-circle-icon btn-new-replay"
-          icon="plus"
-          onClick={this.onToggleModal}
-        />
+        <Tooltip placement="bottomLeft" title="Responder">
+          <Button
+            size="large"
+            type="primary"
+            className="btn-circle-icon btn-new-replay"
+            icon="plus"
+            onClick={this.onToggleModal}
+          />
+        </Tooltip>
       </div>
     )
   }
@@ -81,7 +82,7 @@ class Topic extends Component {
         leftChild={this.renderLeftChild()}
         rightHeader={this.renderRightHeader()}
         rightChild={this.rightChild()}
-        loading={loading}
+      // loading={loading}
       />
     );
   }

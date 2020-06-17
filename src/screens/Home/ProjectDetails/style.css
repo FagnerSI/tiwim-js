@@ -8,7 +8,18 @@
 }
 
 .projetc-roles {
-  padding: 5px;
+  padding: 16px 0;
+}
+
+.projetc-roles > * {
+  margin-bottom: 10px;
+}
+
+.project-tag-roles {
+  display: inline-block;
+  padding: 3px;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .topic_list {

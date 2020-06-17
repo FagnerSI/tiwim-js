@@ -28,7 +28,6 @@ class RouteWrapper extends Component<Props> {
                         <Route
                             {...rest}
                             render={props => {
-                                // const propsFromState = Get(props, 'location.state') || {};
 
                                 if (privateRoute && !isAuthenticated) {
                                     return <Redirect to="/login" />;
@@ -39,8 +38,6 @@ class RouteWrapper extends Component<Props> {
                                         header={header}
                                         {...props}
                                         {...passProps}
-                                    //  {...propsFromState}
-                                    //resetHeader={this.props.resetHeader}
                                     />
                                 );
                             }
@@ -53,13 +50,7 @@ class RouteWrapper extends Component<Props> {
     }
 }
 
-/* function mapStateToProps(state) {
-    return {
-        account: state.account.getIn(['payload']).toJS(),
-    };
-} */
 
 export default compose(
     withRouter,
-    // connect(mapStateToProps),
 )(RouteWrapper);
