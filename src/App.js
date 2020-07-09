@@ -15,6 +15,9 @@ import {
   GET_TOKEN_FAILURE,
 } from '~/store/authentication/action';
 
+
+import account from '~/store/account/action';
+
 export const AppContext = React.createContext({
   isAuthenticated: false,
 });
@@ -55,7 +58,7 @@ class App extends Component<Props> {
       }
       prev = Object.assign(prev, { authentication });
     });
-
+    store.dispatch(account());
     store.dispatch(currentToken())
   }
 
