@@ -1,4 +1,7 @@
 import { message } from 'antd';
+import { omit } from 'underscore';
+import { save, remove } from '~/store/account/action';
+
 export const AUTHENTICATION_SUCCESS = 'AUTHENTICATION_SUCCESS';
 export const AUTHENTICATION_FAILURE = 'AUTHENTICATION_FAILURE';
 export const AUTHENTICATION_REQUEST = 'AUTHENTICATION_REQUEST';
@@ -11,7 +14,12 @@ export const LOGOUT = 'LOGOUT';
 
 export function success(payload) {
     localStorage.setItem('@AuthToken', payload.token);
-    return { type: AUTHENTICATION_SUCCESS, payload }
+    return dispatch => {
+        dispatch(save(omit(payload, 'token')))
+        dispatch({
+            type: AUTHENTICATION_SUCCESS, payload
+        });
+    }
 }
 
 export function failure(error) {
@@ -45,16 +53,20 @@ export function currentToken() {
 }
 
 export function logout() {
-    localStorage.setItem('@AuthToken', '');
+    localStorage.removeItem('@AuthToken');
 
-    return {
-        type: LOGOUT,
-        payload: {},
-    };
+    return dispatch => {
+        dispatch(remove())
+        dispatch({
+            type: LOGOUT,
+            payload: {},
+        });
+    }
 }
 
 export default function login(email, password) {
-    localStorage.setItem('@AuthToken', '');
+    localStorage.removeItem('@AuthToken');
+
     return {
         type: AUTHENTICATION_REQUEST,
         payload: {
