@@ -3,7 +3,7 @@ import {
   Empty,
   Menu,
 } from 'antd';
-
+import { isEmpty } from 'underscore';
 import ProjectDetails from './ProjectDetails';
 import ProjectModal from './ProjectModal';
 import MainLayout from '~/components/MainLayout';
@@ -23,12 +23,23 @@ class Home extends Component<Props> {
     project: null,
   };
 
+  componentDidUpdate({ projects }) {
+    if (isEmpty(this.props.projects) === false) {
+      if (this.props.projects.length !== projects.length) {
+        this.setState({
+          current: '0',
+          project: this.props.projects[0]
+        }, () => this.props.getTopics(this.state.project.id))
+      }
+    }
+
+  }
+
   onSelectProject = e => {
     this.setState({
       current: e.key,
       project: this.props.projects[e.key],
-    });
-
+    }, () => this.props.getTopics(this.state.project.id));
   };
 
   renderLeftHeader() {
@@ -42,6 +53,7 @@ class Home extends Component<Props> {
 
   renderLeftChild() {
     const { projects } = this.props;
+
     return (
       <Menu
         onClick={this.onSelectProject}
@@ -69,9 +81,8 @@ class Home extends Component<Props> {
 
   renderRightChild() {
     const { project } = this.state;
-    const projectSelected = project || this.props.projectDefault;
-
-    if (!projectSelected) return null;
+    const projectSelected = project;
+    if (isEmpty(projectSelected)) return null;
 
     return (
       <ProjectDetails
