@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import {
     Button,
+    Spin,
     Input,
+    Form,
     List,
     Modal,
     Tooltip,
@@ -11,6 +12,9 @@ import {
     Select,
     Tag,
 } from 'antd';
+
+import { isEmpty } from 'underscore';
+import Search from '~/common/SearchField';
 
 import moment from 'moment';
 import 'moment/locale/pt-br';
@@ -21,7 +25,7 @@ const { Item } = List;
 const { TextArea } = Input;
 const { Option } = Select;
 
-export default class ProjectDetails extends Component {
+class ProjectDetails extends Component {
 
     state = {
         visible: false,
@@ -34,33 +38,24 @@ export default class ProjectDetails extends Component {
         });
     };
 
-    onChangeTitle(title) {
-        this.setState({
-            title
-        })
-    }
-
-    onChangeDesc(description) {
-        this.setState({
-            description
-        })
-    }
-
-    onChangeSelect = (users) => {
-        this.setState({
-            users
-        })
+    onChange(value) {
+        this.setState(value)
     }
 
     onCreateTopic = () => {
-        const { title, description, users } = this.state;
-        this.props.onCreateTopic({ title, description, users })
-        this.onToggleModal();
+        this.props.form.validateFields((err, values) => {
+            if (!err || isEmpty(err)) {
+                const { title, description, members } = this.state;
+                members.push(this.props.account.id);
+                this.props.onCreateTopic({ title, description, members })
+                this.onToggleModal();
+            }
+        });
     }
 
     renderEditButton(action) {
         return (
-            <Tooltip placement="top" title="Editar Projeto">
+            <Tooltip placement="top" title="Editar Projeto" >
                 <Button
                     type="primary"
                     ghost
@@ -70,23 +65,22 @@ export default class ProjectDetails extends Component {
         )
     }
 
-    renderDeleteButton() {
-        const { name, id } = this.props.project;
-        const projectName = name.length >= 15 ? `${name.substring(0, 15)}...` : name;
+    renderDeleteButton(name, id, isTopic) {
+        const itemName = name.length >= 15 ? `${name.substring(0, 15)}...` : name;
 
         return (
             <Popconfirm
                 placement="bottomRight"
-                title={`Deseja realmente excluir: ${projectName}?`}
-                onConfirm={() => this.props.onDeleteProject(id)}
+                title={`Deseja realmente excluir: ${itemName}?`}
+                onConfirm={isTopic ? () => this.props.onDeleteTopic(id) : () => this.props.onDeleteProject(id)}
                 okText="Sim"
                 cancelText="Não"
             >
-                <Tooltip placement="top" title="Deletar Projeto">
+                <Tooltip placement="top" title={`Deletar ${isTopic ? 'Tópico' : 'Projeto'}`}>
                     <Button
                         type="danger"
-                        ghost
                         icon="delete"
+                        ghost
                     />
                 </Tooltip>
             </Popconfirm>
@@ -111,9 +105,75 @@ export default class ProjectDetails extends Component {
         )
     }
 
-    render() {
-        const { project } = this.props;
+    renderForm() {
+        const { account, project, form } = this.props;
+        const { getFieldDecorator } = form;
 
+        return (
+            <Form colon={false}>
+                <Form.Item label="Título">
+                    {getFieldDecorator('title', {
+                        rules: [{
+                            required: true,
+                            message: 'Digite o titulo do tópico'
+                        }],
+                    }
+                    )(<Input
+                        name="title"
+                        required
+                        allowClear
+                        placeholder="Título para tópico"
+                        onChange={e => this.onChange({ title: e.target.value })}
+                    />,
+                    )}
+                </Form.Item>
+                <Form.Item label="Descrição">
+                    {getFieldDecorator('description', {
+                        rules: [{
+                            message: 'Digite uma descrição para o tópico'
+                        }],
+                    }
+                    )(<TextArea
+                        name="description"
+                        placeholder="Descrição do topico"
+                        autosize={{ minRows: 3, maxRows: 6 }}
+                        onChange={e => this.onChange({ description: e.target.value })}
+                    />,
+                    )}
+                </Form.Item>
+                <Form.Item label="Convidados">
+                    {getFieldDecorator('members', {
+                        rules: [{
+                            required: true,
+                            message: 'Selecione convidados'
+                        }],
+                    }
+                    )(
+
+                        <Select
+                            allowClear
+                            mode="multiple"
+                            showArrow={false}
+                            style={{ width: '100%' }}
+                            placeholder="Selecione convidados"
+                            onChange={members => this.onChange({ members })}
+                            showSearch
+                            optionFilterProp='children'
+                            filterOption={(input, option) =>
+                                Search(input, option.props.children)
+                            }
+                        >
+                            {project.members.filter(user => user.email !== account.email).map(user => <Option key={user.id}>{user.email}</Option>)}
+                        </Select>
+                    )}
+                </Form.Item>
+            </Form>
+        )
+
+    }
+
+    render() {
+        const { project, topics, loading } = this.props;
         return (
             <div>
                 <PageHeader
@@ -122,11 +182,13 @@ export default class ProjectDetails extends Component {
                     subTitle={this.renderDate()}
                     extra={[
                         this.renderEditButton(),
-                        this.renderDeleteButton(project.name)
+                        this.renderDeleteButton(project.name, project.id)
                     ]}
                     className="project_info"
                 >
-                    {project.description}
+                    <div className="project_desc">
+                        {project.description}
+                    </div>
                     {this.renderTags()}
                 </PageHeader>
                 <div className="topic_list">
@@ -141,16 +203,25 @@ export default class ProjectDetails extends Component {
                     </Tooltip>
                 </div>
                 <div className="list_container">
-                    <List
-                        bordered
-                        className="demo-loadmore-list"
-                        dataSource={project.topics}
-                        renderItem={item => (
-                            <Item key={item.id} actions={[this.renderDeleteButton(item.title)]}>
-                                <Item.Meta title={<Link to={`topics/${item.id}`}>{item.title}</Link>} />
-                            </Item>
-                        )}
-                    />
+                    {loading && topics
+                        ? (
+                            <div className="load-container" >
+                                <Spin size="large" />
+                            </div>
+                        ) : (<List
+                            bordered
+                            className="demo-loadmore-list"
+                            dataSource={topics}
+                            renderItem={item => (
+                                <Item key={item.id} actions={[this.renderDeleteButton(item.title, item.id, true)]}>
+                                    <Item.Meta title={
+                                        <Button type='link' onClick={() => this.props.openTopic(item.id)}>
+                                            {item.title}
+                                        </Button>
+                                    } />
+                                </Item>
+                            )}
+                        />)}
                 </div>
                 <Modal
                     title="Criar Topico"
@@ -159,37 +230,16 @@ export default class ProjectDetails extends Component {
                     okText="Criar"
                     onCancel={this.onToggleModal}
                     centered
+                    maskClosable={false}
                 >
-                    <Input
-                        name="title"
-                        required
-                        allowClear
-                        placeholder="Titulo para topico"
-                        onChange={e => this.onChangeTitle(e.target.value)}
-                    />
-                    <div style={{ margin: '24px 0' }} />
-                    <TextArea
-                        name="description"
-                        placeholder="Descrição do topico"
-                        autosize={{ minRows: 3, maxRows: 6 }}
-                        onChange={e => this.onChangeDesc(e.target.value)}
-                    />
-                    <div style={{ margin: '24px 0' }} />
-
-                    {/*  <Select
-                        mode="multiple"
-                        allowClear
-                        style={{ width: '100%' }}
-                        placeholder="Selecione convidados"
-                        onChange={this.onChangeSelect}
-                    >
-                        {
-                            //ASSIM NÃO DÁ
-                            users.map(user => <Option key={user.id}>{user.email}</Option>)
-                        }
-                    </Select> */}
+                    {this.renderForm()}
                 </Modal>
             </div>
         );
     }
 }
+
+
+const WrappedProjectDetails = Form.create({})(ProjectDetails);
+
+export default WrappedProjectDetails;

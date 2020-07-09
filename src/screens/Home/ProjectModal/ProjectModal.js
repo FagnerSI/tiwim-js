@@ -49,7 +49,6 @@ class ProjectModal extends Component {
 
     removeRole = removedRole => {
         const roles = this.state.roles.filter(role => role !== removedRole);
-        console.log(roles);
         this.setState({ roles });
     };
 

@@ -2,13 +2,22 @@
   border-bottom: 1px solid #e8e8e8;
 }
 
+.project_desc {
+  display: flex;
+  max-height: 5rem;
+  overflow: auto;
+}
+
 .date {
   padding-top: 4px;
   font-size: 11px;
 }
 
 .projetc-roles {
-  padding: 16px 0;
+  display: flex;
+  padding-top: 16px;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 .projetc-roles > * {
@@ -34,6 +43,6 @@
 
 .list_container {
   overflow: auto;
-  max-height: 15rem;
+  max-height: 40vh;
   margin: 0 20px;
 }

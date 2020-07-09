@@ -64,7 +64,7 @@ class Topic extends Component {
           <Button
             size="large"
             type="primary"
-            className="btn-circle-icon btn-new-replay"
+            className="btn-new-replay"
             icon="plus"
             onClick={this.onToggleModal}
           />
@@ -82,7 +82,7 @@ class Topic extends Component {
         leftChild={this.renderLeftChild()}
         rightHeader={this.renderRightHeader()}
         rightChild={this.rightChild()}
-      // loading={loading}
+        loading={loading}
       />
     );
   }
