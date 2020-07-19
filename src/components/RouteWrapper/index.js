@@ -17,9 +17,11 @@ class RouteWrapper extends Component<Props> {
 
     render() {
         const {
-            component: Child, privateRoute, passProps, ...rest
+            component: Child, privateRoute, ...rest
         } = this.props;
         if (!Child) return null;
+
+
         return (
             <AppContext.Consumer>
                 {({
@@ -37,7 +39,7 @@ class RouteWrapper extends Component<Props> {
                                     <Child
                                         header={header}
                                         {...props}
-                                        {...passProps}
+                                        {...props.location.state}
                                     />
                                 );
                             }

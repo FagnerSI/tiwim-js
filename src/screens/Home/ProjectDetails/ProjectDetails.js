@@ -7,10 +7,12 @@ import {
     List,
     Modal,
     Tooltip,
+    Collapse,
     PageHeader,
     Popconfirm,
     Select,
     Tag,
+    Card,
 } from 'antd';
 
 import { isEmpty } from 'underscore';
@@ -24,6 +26,7 @@ import './style.css';
 const { Item } = List;
 const { TextArea } = Input;
 const { Option } = Select;
+const { Panel } = Collapse;
 
 class ProjectDetails extends Component {
 
@@ -96,11 +99,29 @@ class ProjectDetails extends Component {
         )
     }
 
+    renderDescription() {
+        const { project } = this.props;
+        return (
+            <div className="project_desc">
+                {project.description}
+            </div>
+        )
+    }
+
     renderTags() {
         const roles = this.props.project.roles || [];
         return (
             <div className="projetc-roles">
                 {roles.map((item) => <Tag color='blue'><div className="project-tag-roles">{item.name}</div></Tag>)}
+            </div>
+        )
+    }
+
+    renderMembers() {
+        const members = this.props.project.members || [];
+        return (
+            <div className="projetc-roles">
+                {members.map((item) => <Tag>{item.name} - {item.email}</Tag>)}
             </div>
         )
     }
@@ -153,7 +174,7 @@ class ProjectDetails extends Component {
                         <Select
                             allowClear
                             mode="multiple"
-                            showArrow={false}
+                            showArrow={true}
                             style={{ width: '100%' }}
                             placeholder="Selecione convidados"
                             onChange={members => this.onChange({ members })}
@@ -175,20 +196,19 @@ class ProjectDetails extends Component {
     render() {
         const { project, topics, loading } = this.props;
         return (
-            <div>
+            <Card className='card_project'>
                 <PageHeader
                     key={project.id}
                     title={project.name}
-                    subTitle={this.renderDate()}
+                    className="project_info"
                     extra={[
                         this.renderEditButton(),
                         this.renderDeleteButton(project.name, project.id)
                     ]}
-                    className="project_info"
                 >
-                    <div className="project_desc">
-                        {project.description}
-                    </div>
+                    {this.renderDate()}
+                    {this.renderDescription()}
+                    {this.renderMembers()}
                     {this.renderTags()}
                 </PageHeader>
                 <div className="topic_list">
@@ -215,7 +235,7 @@ class ProjectDetails extends Component {
                             renderItem={item => (
                                 <Item key={item.id} actions={[this.renderDeleteButton(item.title, item.id, true)]}>
                                     <Item.Meta title={
-                                        <Button type='link' onClick={() => this.props.openTopic(item.id)}>
+                                        <Button type='link' onClick={() => this.props.openTopic(item)}>
                                             {item.title}
                                         </Button>
                                     } />
@@ -234,7 +254,7 @@ class ProjectDetails extends Component {
                 >
                     {this.renderForm()}
                 </Modal>
-            </div>
+            </Card>
         );
     }
 }

@@ -54,8 +54,14 @@ class ProjectDetailsContainer extends Component {
         this.props.dispatch(deleteTopic(topicId));
     }
 
-    openTopic = (topicId) => {
-        this.props.history.push(getPath('Topic', [topicId]));
+    openTopic = (topic) => {
+        this.props.history.push(
+            getPath('Topic', [topic.id]),
+            {
+                project: this.props.project,
+                topic,
+            }
+        );
     }
 
     render() {

@@ -131,7 +131,7 @@ class ProjectModal extends Component {
                         <Select
                             allowClear
                             mode="multiple"
-                            showArrow={false}
+                            showArrow={true}
                             style={{ width: '100%' }}
                             placeholder="Selecione convidados"
                             onChange={members => this.onChangeValue({ members })}

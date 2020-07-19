@@ -72,9 +72,8 @@ class App extends Component<Props> {
             Object.values(routes.routesNames).map((routeName, index) => {
               const route = routes.getRoute(routeName);
               if (!route) return null;
-
               return (
-                <RouteWrapper key={index} {...route} router={routes} />
+                <RouteWrapper key={index} {...route} />
               );
             })
           }
@@ -99,9 +98,6 @@ class App extends Component<Props> {
           <AppContext.Provider
             value={{
               isAuthenticated,
-              /* resume,
-              resetHeader: this.resetHeader,
-              header, */
             }}
           >
             {this.renderNavigation()}
