@@ -5,6 +5,7 @@ import moment from 'moment';
 import 'moment/locale/pt-br';
 import { Header, MainLayout } from '~/components';
 import Replay from './Replay';
+import ReplayModal from './ReplayModal';
 import './style.css';
 
 class Topic extends Component {
@@ -32,7 +33,8 @@ class Topic extends Component {
   }
 
   renderLeftChild() {
-    const { title, description, created_at } = this.props.topic;
+    const { project, topic } = this.props;
+    const { title, description, created_at } = topic;
     return (
       <div className="topic-details">
         <span className="topic-title">{title}</span>
@@ -40,6 +42,7 @@ class Topic extends Component {
         <div className="topic-desc">
           <Text>{description}</Text>
         </div>
+        <ReplayModal project={project} topic={topic} />
       </div>
     )
   }
@@ -51,24 +54,15 @@ class Topic extends Component {
   }
 
   rightChild() {
-    const { replays } = this.props.topic;
+    const { replays } = this.props;
 
     return (
       <div className="replays-container">
         <Divider orientation="left"><span className="replays-title">Respostas</span></Divider>
         {
-          replays
-          && (replays.map(replay => <Replay replay={replay} />))
+          replays.map(replay => <Replay replay={replay} />)
         }
-        <Tooltip placement="bottomLeft" title="Responder">
-          <Button
-            size="large"
-            type="primary"
-            className="btn-new-replay"
-            icon="plus"
-            onClick={this.onToggleModal}
-          />
-        </Tooltip>
+
       </div>
     )
   }
@@ -76,6 +70,7 @@ class Topic extends Component {
   render() {
     const { topic, loading } = this.props;
     if (!topic) return null;
+
     return (
       <MainLayout
         leftHeader={this.renderLeftHeader()}
@@ -87,4 +82,6 @@ class Topic extends Component {
     );
   }
 }
+
+
 export default Topic;
