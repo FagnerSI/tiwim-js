@@ -4,7 +4,7 @@ import api from '~/services/api';
 import { GET_TOPICS_PROJECT_REQUEST, success, failure } from './action';
 
 
-function* createTopicsProject({ payload }) {
+function* getTopics({ payload }) {
     try {
         let { data } = yield call(api().get, `/projects/${payload}/topics`);
         yield put(success(data));
@@ -13,6 +13,6 @@ function* createTopicsProject({ payload }) {
     }
 }
 
-export default function* getTopictsProjectTakeLatest() {
-    yield takeLatest(GET_TOPICS_PROJECT_REQUEST, createTopicsProject)
+export default function* getTopicsTakeLatest() {
+    yield takeLatest(GET_TOPICS_PROJECT_REQUEST, getTopics)
 }
