@@ -1,19 +1,19 @@
 /* eslint-disable no-sequences */
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import { CREATE_PROJECT_SUCCESS } from '~/store/createProject/action';
+import { DELETE_PROJECT_SUCCESS } from '~/store/deleteProject/action';
+import { CREATE_TOPIC_SUCCESS } from '~/store/createTopic/action';
+import { DELETE_TOPIC_SUCCESS } from '~/store/deleteTopic/action';
 import getProjects, { GET_PROJECTS_SUCCESS } from '~/store/getProjects/action';
-import { message } from 'antd';
-import Home from './Home';
+import getTopicsByProject from '~/store/getTopicsByProject/action';
 
-import api from '~/services/api';
+import Home from './Home';
 
 
 class HomeContainer extends Component {
-
     state = {
         projects: [],
-        users: [],
-        project: null,
     }
 
     componentWillMount() {
@@ -21,83 +21,59 @@ class HomeContainer extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { projects } = this.props;
+        const { projects, project, deleteProject, createTopic, deleteTopic } = this.props;
         (() => {
             if (projects.type === prevProps.projects.type) return;
             if (projects.type === GET_PROJECTS_SUCCESS) {
                 const { payload } = projects;
                 this.setState({
                     projects: payload,
-                    project: payload[0],
                 })
+            };
+        })();
+        (() => {
+            if (project.type === prevProps.project.type) return;
+            if (project.type === CREATE_PROJECT_SUCCESS) {
+                this.onLoadProjects()
+            };
+        })();
+        (() => {
+            if (deleteProject.type === prevProps.deleteProject.type) return;
+            if (deleteProject.type === DELETE_PROJECT_SUCCESS) {
+                this.onLoadProjects()
+            };
+        })();
+        (() => {
+            if (createTopic.type === prevProps.createTopic.type) return;
+            if (createTopic.type === CREATE_TOPIC_SUCCESS) {
+                this.onLoadProjects()
+            };
+        })();
+        (() => {
+            if (deleteTopic.type === prevProps.deleteTopic.type) return;
+            if (deleteTopic.type === DELETE_TOPIC_SUCCESS) {
+                this.onLoadProjects()
             };
         })();
     }
 
-    onLoadProjects = (index = 0) => {
+    onLoadProjects = () => {
         this.props.dispatch(getProjects());
     }
 
-    loadUsers = async () => {
-        const response = await api.get('/users');
-        this.setState({
-            users: response.data,
-        })
-    }
-
-    onSelectProject = (id) => {
-        const { projects } = this.state;
-        this.setState({
-            project: projects[id]
-        })
-    }
-
-    onCreateProject = async (project) => {
-        await api.post(`/projects`, project)
-            .then(
-                (result) => (
-                    message.success('Projeto criado com sucesso.'),
-                    this.onLoadProjects(this.state.projects.length)
-                ),
-                (result, error) => (message.error('Erro ao tentar criar projeto')),
-            )
-    }
-
-    onDeleteProject = async () => {
-        try {
-            await api.delete(`/projects/${this.state.project.id}`);
-            message.success('Projeto removido com sucesso.');
-            this.loadProjects();
-        }
-        catch {
-            message.error('Erro ao tentar remover projeto');
-        }
-    }
-
-    onCreateTopic = async (topic) => {
-        try {
-            const newTopic = {
-                project: this.state.project.id,
-                ...topic,
-            };
-            await api.post(`/topics`, newTopic);
-            message.success('Topico criado com sucesso.');
-        } catch {
-            message.error('Erro ao tentar criar topico.');
-        }
+    getTopics = (projectId) => {
+        this.props.dispatch(getTopicsByProject(projectId));
     }
 
     render() {
         const loading = this.props.projects.loading;
+        const { projects } = this.state;
+
         return (
             <Home
-                {...this.state}
                 loading={loading}
-                onSelectProject={this.onSelectProject}
-                onCreateProject={this.onCreateProject}
-                onDeleteProject={this.onDeleteProject}
-                onCreateTopic={this.onCreateTopic}
-                loadUsers={this.loadUsers}
+                projects={projects}
+                getTopics={this.getTopics}
             />
         );
     }
@@ -106,6 +82,11 @@ class HomeContainer extends Component {
 function mapStateToProps(state) {
     return {
         projects: state.getProjects,
+        project: state.createProject,
+        deleteProject: state.deleteProject,
+        createTopic: state.createTopic,
+        deleteTopic: state.deleteTopic,
+        topics: state.getTopicsByProject,
     }
 }
 

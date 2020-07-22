@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Text from 'react-format-text';
-import { Divider } from 'antd';
+import { Button, Divider, Tooltip } from 'antd';
 import moment from 'moment';
 import 'moment/locale/pt-br';
-import { Button, Header, MainLayout } from '~/components';
+import { Header, MainLayout } from '~/components';
 import Replay from './Replay';
+import ReplayModal from './ReplayModal';
 import './style.css';
 
 class Topic extends Component {
@@ -14,25 +15,26 @@ class Topic extends Component {
   };
 
   renderLeftHeader() {
-
     const { history } = this.props;
+
     return (
       <div className='project-header'>
-        <Button
-          placement="bottomLeft"
-          tooltipTitle="Ir para Home"
-          btnType="primary"
-          styleComponent="btn-primary"
-          icon="arrow-left"
-          onClick={history.goBack}
-        />
+        <Tooltip placement="bottomLeft" title="Ir para Home">
+          <Button
+            type="primary"
+            className="btn-circle-icon"
+            icon="arrow-left"
+            onClick={history.goBack}
+          />
+        </Tooltip>
         <span style={{ padding: "0 10px" }}>Voltar</span>
       </div>
     );
   }
 
   renderLeftChild() {
-    const { title, description, created_at } = this.props.topic;
+    const { project, topic } = this.props;
+    const { title, description, created_at } = topic;
     return (
       <div className="topic-details">
         <span className="topic-title">{title}</span>
@@ -40,6 +42,7 @@ class Topic extends Component {
         <div className="topic-desc">
           <Text>{description}</Text>
         </div>
+        <ReplayModal project={project} topic={topic} />
       </div>
     )
   }
@@ -51,23 +54,15 @@ class Topic extends Component {
   }
 
   rightChild() {
-    const { replays } = this.props.topic;
+    const { replays } = this.props;
 
     return (
       <div className="replays-container">
         <Divider orientation="left"><span className="replays-title">Respostas</span></Divider>
         {
-          replays
-          && (replays.map(replay => <Replay replay={replay} />))
+          replays.map(replay => <Replay replay={replay} />)
         }
-        <Button
-          placement="bottomLeft"
-          tooltipTitle="Novo Projeto"
-          btnType="primary"
-          styleComponent="btn-primary btn-new-replay"
-          icon="plus"
-          onClick={this.onToggleModal}
-        />
+
       </div>
     )
   }
@@ -75,6 +70,7 @@ class Topic extends Component {
   render() {
     const { topic, loading } = this.props;
     if (!topic) return null;
+
     return (
       <MainLayout
         leftHeader={this.renderLeftHeader()}
@@ -86,4 +82,6 @@ class Topic extends Component {
     );
   }
 }
+
+
 export default Topic;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './style.css';
-import kindSpeechs from '~/common/kind_speechs';
+import { Tag } from 'antd';
+import kindSpeechs from '~/common/kindSpeechs';
 
 export default class Replay extends Component {
 
@@ -12,13 +13,16 @@ export default class Replay extends Component {
                 <div className="card-header">
                     <span className="kind-speech">{kindSpeechs[replay.kind_speech]}</span>
                     <div className="user-replay">
-                        <span>{replay.user.name}</span>
+                        <span>{replay.author.name}</span>
                     </div>
                 </div>
                 <div className="card-body">
                     <span className="roles">
-                        <span className="role-in"><b>No papel:</b> {replay.roles_in.name}</span>
-                        <b>Para:</b> {replay.roles_for.name}
+                        <span className="role-in">
+                            <b>No papel: </b><Tag>{replay.roles_in.name}</Tag>
+                        </span>
+                        <b>Para: </b>
+                        {replay.roles_for.map(item => <Tag>{item.name}</Tag>)}
                     </span>
                     <p className="desc">{replay.description}</p>
                     {/* <div>Descrição detalhada</div> */}

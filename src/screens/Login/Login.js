@@ -2,96 +2,174 @@ import React, { Component } from 'react';
 import {
     Card,
     Form,
-    Icon,
     Input,
     Button,
-    Checkbox
 } from 'antd';
+import { logo_h } from '~/assets'
 
+import { isEmpty } from 'underscore';
+import EmailCheck from '~/common/EmailCheck';
 
 import './style.css';
 import 'antd/dist/antd.css';
 
 
 class Login extends Component {
+    state = {
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        isCreateAccount: false,
+    }
 
-    handleSubmit = e => {
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
+    onOpenLogin = value => {
+        this.setState({ isCreateAccount: false });
+        this.props.form.resetFields()
+    };
+
+    onOpenCreateAccount = value => {
+        this.setState({ isCreateAccount: true });
+        this.props.form.resetFields()
+    };
+
+    onChange = value => {
+        this.setState(value);
+    };
+
+    onSubmit = () => {
+        const { isCreateAccount } = this.state;
+        const { form, onCreateAccount, onLogin } = this.props;
+
+        form.validateFields((err, values) => {
+            if (!err || isEmpty(err)) {
+                isCreateAccount
+                    ? onCreateAccount(values)
+                    : onLogin(values)
             }
         });
     };
 
     render() {
+        const { isCreateAccount } = this.state;
         const { getFieldDecorator } = this.props.form;
+
         return (
             <div className="login-container">
-                <Card bordered style={{ width: 380 }}>
-                    <Form onSubmit={this.handleSubmit} className="login-form">
-                        <Form.Item>
-                            {
-                                getFieldDecorator(
-                                    'username',
-                                    {
-                                        rules: [
-                                            {
-                                                required: true,
-                                                message: 'Please input your username!'
-                                            }
-                                        ],
-                                    }
+                <Card className="login-card">
+                    <div className="login-select-container">
+                        <Button
+                            type={isCreateAccount ? 'primary' : 'link'}
+                            onClick={this.onOpenLogin}
+                            size="large"
+                            className="login-select-button"
+                        >
+                            Entrar
+                        </Button>
+                        <Button
+                            type={isCreateAccount ? 'link' : 'primary'}
+                            onClick={this.onOpenCreateAccount}
+                            size="large"
+                            className="login-select-button"
+                        >
+                            Criar conta
+                        </Button>
+                    </div>
+                    <div className="login-logo-container" >
+                        <img src={logo_h} className="login-logo" alt="Logo da plataforma" />
+                    </div>
+                    <Form colon={false}>
+                        {isCreateAccount &&
+                            (<Form.Item label="Nome">
+                                {getFieldDecorator('name', {
+                                    rules: [{
+                                        required: true,
+                                        message: 'Digite seu nome'
+                                    }],
+                                }
                                 )(
                                     <Input
-                                        prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                        placeholder="Username"
+                                        size="large"
+                                        placeholder="Digite seu nome"
+                                        onChange={e => this.onChange({ name: e.target.value })}
                                     />,
-                                )
-                            }
-                        </Form.Item>
-                        <Form.Item>
-                            {
-                                getFieldDecorator(
-                                    'password',
+                                )}
+                            </Form.Item>)
+                        }
+                        <Form.Item label="Email">
+                            {getFieldDecorator('email', {
+                                rules: [
                                     {
-                                        rules: [
-                                            {
-                                                required: true,
-                                                message: 'Please input your Password!'
-                                            }
-                                        ],
-                                    })(
-                                        <Input
-                                            prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                            type="password"
-                                            placeholder="Password"
-                                        />,
-                                    )
-                            }
-                        </Form.Item>
-                        <Form.Item>
-                            {
-                                getFieldDecorator(
-                                    'remember',
+                                        required: true,
+                                        message: 'Digite seu email'
+                                    },
                                     {
-                                        valuePropName: 'checked',
-                                        initialValue: true,
-                                    }
+                                        pattern: EmailCheck,
+                                        message: 'Formato: exemplo@mail.com',
+                                    },
+
+                                ],
+                            }
+                            )(
+                                <Input
+                                    size="large"
+                                    placeholder="exemplo@mail.com"
+                                    onChange={e => this.onChange({ email: e.target.value })}
+                                />,
+                            )}
+                        </Form.Item>
+                        <Form.Item label="Senha">
+                            {getFieldDecorator('password', {
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: 'Digite sua senha'
+                                    },
+                                    {
+                                        min: 8,
+                                        message: 'Mínimo de 8 caracteres',
+                                    },
+                                ],
+                            })(
+                                <Input.Password
+                                    size="large"
+                                    placeholder="Digite sua senha"
+                                    onChange={e => this.onChange({ password: e.target.value })}
+                                />,
+                            )}
+                        </Form.Item>
+                        {isCreateAccount &&
+                            (<Form.Item label="Confirmar senha">
+                                {getFieldDecorator('confirmPassword', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: 'Digite a senha novamente'
+                                        },
+                                        {
+                                            min: 8,
+                                            message: 'Mínimo de 8 caracteres',
+                                        },
+                                    ],
+                                }
                                 )(
-                                    <Checkbox>Remember me</Checkbox>)
-                            }
-                            <Button type="primary" htmlType="submit" className="login-form-button">
-                                Log in
+                                    <Input.Password
+                                        size="large"
+                                        placeholder="Digite a senha novamente"
+                                        onChange={e => this.onChange({ confirmPassword: e.target.value })}
+                                    />,
+                                )}
+                            </Form.Item>)
+                        }
+                        <Form.Item>
+                            {!isCreateAccount && <a href="/">Esqueceu sua senha?</a>}
+                            <Button type="primary" onClick={this.onSubmit} block>
+                                {isCreateAccount ? 'Criar conta' : 'Entrar'}
                             </Button>
-                            <div>
-                                <a className="login-form-forgot" href="/">Forgot password </a>
-                                Or <a href="/">register now!</a>
-                            </div>
                         </Form.Item>
                     </Form>
-                </Card>
-            </div>
+                </Card >
+            </div >
         );
     }
 }

@@ -1,20 +1,50 @@
+.card_project {
+  border-radius: 8px;
+  box-shadow: 1px 2px 5px #0003;
+}
+
 .project_info {
   border-bottom: 1px solid #e8e8e8;
 }
 
+.project_desc {
+  display: flex;
+  max-height: 5rem;
+  overflow: auto;
+}
+
+.ant-page-header-content {
+  padding: 0;
+}
+
 .date {
   padding-top: 4px;
-  font-size: 11px;
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 
 .projetc-roles {
-  padding: 5px;
+  display: flex;
+  padding-top: 10px;
+  overflow-x: auto;
+  max-width: 100%;
+  padding-bottom: 5px;
+}
+
+/* .projetc-roles > * {
+} */
+
+.project-tag-roles {
+  display: inline-block;
+  padding: 3px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .topic_list {
   display: flex;
   justify-content: space-between;
-  padding: 0 0.5em;
+  /*  padding: 0 0.5em; */
   font-size: 18px;
   font-weight: 600;
   margin: 1rem;
@@ -23,6 +53,6 @@
 
 .list_container {
   overflow: auto;
-  max-height: 15rem;
+  max-height: 40vh;
   margin: 0 20px;
 }
