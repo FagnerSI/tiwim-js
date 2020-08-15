@@ -22,9 +22,9 @@ export function success(payload) {
     }
 }
 
-export function failure(error) {
-    message.error(error);
-    return { type: AUTHENTICATION_FAILURE, payload: error }
+export function failure({ data }) {
+    message.error(data.non_field_errors, 5)
+    return { type: AUTHENTICATION_FAILURE, payload: data }
 }
 
 export function currentToken() {

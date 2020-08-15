@@ -11,22 +11,8 @@
 }
 
 .login-card {
-  position: relative;
   width: 400px;
   box-shadow: 1px 2px 10px #0006;
-}
-
-.login-select-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-}
-
-.login-select-button {
-  font-weight: 600;
-  width: 50%;
-  border-radius: 0 !important;
 }
 
 .login-logo-container {
@@ -39,5 +25,23 @@
 .login-logo {
   width: auto;
   height: 80px;
-  margin-top: 36px;
+}
+
+.forgot-container {
+  margin-top: -25px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.login-select-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.login-select-button {
+  font-weight: 500;
+  padding: 0 6px !important;
 }
