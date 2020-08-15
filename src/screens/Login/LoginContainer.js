@@ -7,17 +7,26 @@ import { getRoute, routesNames } from '~/screens/routes';
 import login, {
     AUTHENTICATION_SUCCESS,
 } from '~/store/authentication/action';
-import createAccount from '~/store/createAccount/action';
+import createAccount, {
+    CREATE_ACCOUNT_SUCCESS
+} from '~/store/createAccount/action';
 
 class LoginContainer extends Component {
 
     componentDidUpdate(prevProps) {
-        const { authentication, history } = this.props;
+        const { authentication, createAccount, history } = this.props;
 
         (() => {
             if (prevProps.authentication.type !== authentication.type) {
                 if (authentication.type === AUTHENTICATION_SUCCESS) {
                     history.push(getRoute(routesNames.Home).path)
+                };
+            }
+        })();
+        (() => {
+            if (prevProps.createAccount.type !== createAccount.type) {
+                if (createAccount.type === CREATE_ACCOUNT_SUCCESS) {
+                    this.onLogin(this.state);
                 };
             }
         })();
@@ -28,6 +37,7 @@ class LoginContainer extends Component {
     }
 
     onCreateAccount = (values) => {
+        this.setState({ ...values })
         this.props.dispatch(createAccount(values))
     }
 
@@ -39,6 +49,7 @@ class LoginContainer extends Component {
 function mapStateToProps(state) {
     return {
         authentication: state.authentication,
+        createAccount: state.createAccount,
     }
 }
 

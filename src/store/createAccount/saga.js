@@ -8,8 +8,8 @@ function* createAccount({ payload }) {
     try {
         let { data } = yield call(api().post, `/accounts`, payload);
         yield put(success(data));
-    } catch (error) {
-        yield put(failure("Não foi possivél criar sua conta!"));
+    } catch ({ response }) {
+        yield put(failure(response));
     }
 }
 

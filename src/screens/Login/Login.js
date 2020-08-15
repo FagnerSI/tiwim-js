@@ -13,7 +13,6 @@ import EmailCheck from '~/common/EmailCheck';
 import './style.css';
 import 'antd/dist/antd.css';
 
-
 class Login extends Component {
     state = {
         name: '',
@@ -57,24 +56,6 @@ class Login extends Component {
         return (
             <div className="login-container">
                 <Card className="login-card">
-                    <div className="login-select-container">
-                        <Button
-                            type={isCreateAccount ? 'primary' : 'link'}
-                            onClick={this.onOpenLogin}
-                            size="large"
-                            className="login-select-button"
-                        >
-                            Entrar
-                        </Button>
-                        <Button
-                            type={isCreateAccount ? 'link' : 'primary'}
-                            onClick={this.onOpenCreateAccount}
-                            size="large"
-                            className="login-select-button"
-                        >
-                            Criar conta
-                        </Button>
-                    </div>
                     <div className="login-logo-container" >
                         <img src={logo_h} className="login-logo" alt="Logo da plataforma" />
                     </div>
@@ -162,10 +143,26 @@ class Login extends Component {
                             </Form.Item>)
                         }
                         <Form.Item>
-                            {!isCreateAccount && <a href="/">Esqueceu sua senha?</a>}
+                            {
+                                !isCreateAccount &&
+                                <div className="forgot-container">
+                                    <a href="/">Esqueceu sua senha?</a>
+                                </div>
+                            }
                             <Button type="primary" onClick={this.onSubmit} block>
                                 {isCreateAccount ? 'Criar conta' : 'Entrar'}
                             </Button>
+                            <div className="login-select-container">
+                                {isCreateAccount ? 'Você já possui uma conta?' : 'Ainda não possui conta?'}
+                                <Button
+                                    type='link'
+                                    onClick={isCreateAccount ? this.onOpenLogin : this.onOpenCreateAccount}
+                                    className="login-select-button"
+                                //block
+                                >
+                                    {isCreateAccount ? 'Fazer login' : ' Criar conta'}
+                                </Button>
+                            </div>
                         </Form.Item>
                     </Form>
                 </Card >
