@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Text from 'react-format-text';
-import { Button, Divider, Tooltip } from 'antd';
+import { Button, Tooltip, Spin, Empty } from 'antd';
 import moment from 'moment';
 import 'moment/locale/pt-br';
-import { Header, MainLayout } from '~/components';
+import { Header, MainLayout, } from '~/components';
 import Replay from './Replay';
 import ReplayModal from './ReplayModal';
 import './style.css';
@@ -19,7 +19,7 @@ class Topic extends Component {
 
     return (
       <div className='project-header'>
-        <Tooltip placement="bottomLeft" title="Ir para Home">
+        <Tooltip placement="bottomLeft" title="Ir para Projetos">
           <Button
             type="primary"
             className="btn-circle-icon"
@@ -53,17 +53,43 @@ class Topic extends Component {
     )
   }
 
-  rightChild() {
-    const { replays } = this.props;
+  renderReplay() {
+    const { replays, account, removeReplay } = this.props;
 
     return (
-      <div className="replays-container">
-        <Divider orientation="left"><span className="replays-title">Respostas</span></Divider>
-        {
-          replays.map(replay => <Replay replay={replay} />)
-        }
+      replays && replays.length
+        ? replays.map(replay => <Replay replay={replay} removeReplay={removeReplay} account={account.payload} />)
+        : (
+          <div className="empty-container">
+            <Empty className="empty" description="Esse tópico não possui comentários." />
+          </div>
+        )
+    )
+  }
 
-      </div>
+  rightChild() {
+    const { loadReplays, deleteReplayloading } = this.props;
+
+    return (
+      <>
+        <span className="replays-title">COMENTÁRIOS</span>
+        <div className="replays-container">
+          {deleteReplayloading
+            ? <Spin size="large" />
+            : this.renderReplay()
+          }
+          <Tooltip title="Atualizar comentários" placement="left">
+            <Button
+              size="large"
+              type="primary"
+              shape="circle"
+              icon="sync"
+              className="btn-sync"
+              onClick={loadReplays}
+            />
+          </Tooltip>
+        </div>
+      </>
     )
   }
 

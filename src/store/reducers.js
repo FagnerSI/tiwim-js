@@ -10,8 +10,10 @@ import getReplaysOfTopic from './getReplaysOfTopic/reducer';
 import getTopicsByProject from './getTopicsByProject/reducer';
 import deleteProject from './deleteProject/reducer';
 import deleteTopic from './deleteTopic/reducer';
+import deleteReplay from './deleteReplay/reducer';
 import getProjects from './getProjects/reducer';
 import getUsers from './getUsers/reducer';
+import updateProject from './updateProject/reducer';
 
 export default combineReducers({
     account,
@@ -22,8 +24,10 @@ export default combineReducers({
     deleteProject,
     createReplay,
     deleteTopic,
+    deleteReplay,
     getReplaysOfTopic,
     getTopicsByProject,
     getProjects,
     getUsers,
+    updateProject,
 });

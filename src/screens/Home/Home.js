@@ -67,7 +67,7 @@ class Home extends Component<Props> {
                 <Menu.Item key={index}>{project.name}</Menu.Item>
               ))
             )
-            : <Empty style={{ padding: '50px 0' }} description="Você não possui projetos." />
+            : <Empty className='empty-project' description="Você não possui projetos." />
         }
       </Menu>
     )
