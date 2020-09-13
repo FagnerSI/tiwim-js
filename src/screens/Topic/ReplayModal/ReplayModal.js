@@ -44,7 +44,7 @@ const KIND_OF_SPEECH_CHOICES = [
 ]
 
 const initState = {
-    urlDescription: '',
+    url_details: '',
     description: '',
     kind_speech: '',
     roles_for: [],
@@ -76,7 +76,7 @@ class ReplayModal extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err || isEmpty(err)) {
                 const {
-                    urlDescription,
+                    url_details,
                     description,
                     kind_speech,
                     roles_for,
@@ -84,7 +84,7 @@ class ReplayModal extends Component {
                 } = values;
 
                 this.props.onCreateReplay({
-                    urlDescription,
+                    url_details,
                     description,
                     kind_speech,
                     roles_for,

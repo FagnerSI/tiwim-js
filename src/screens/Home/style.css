@@ -39,3 +39,9 @@
   font-weight: 600;
   background-color: #f0f0f0 !important;
 }
+
+.empty-project {
+  padding-top: 40px;
+  font-size: 18px;
+  border-radius: 100%;
+}

@@ -7,14 +7,15 @@ import {
     List,
     Modal,
     Tooltip,
-    Collapse,
     PageHeader,
     Popconfirm,
     Select,
     Tag,
     Card,
+    Empty,
 } from 'antd';
 
+import ProjectModal from '~/screens/Home/ProjectModal';
 import { isEmpty } from 'underscore';
 import Search from '~/common/SearchField';
 
@@ -26,7 +27,6 @@ import './style.css';
 const { Item } = List;
 const { TextArea } = Input;
 const { Option } = Select;
-const { Panel } = Collapse;
 
 class ProjectDetails extends Component {
 
@@ -56,17 +56,10 @@ class ProjectDetails extends Component {
         });
     }
 
-    renderEditButton(action) {
-        return (
-            <Tooltip placement="top" title="Editar Projeto" >
-                <Button
-                    type="primary"
-                    ghost
-                    icon="edit"
-                />
-            </Tooltip>
-        )
-    }
+    /* renderEditButton() {
+        const { project } = this.props;
+        return (<ProjectModal project={project} isUpdateProject={true} />)
+    } */
 
     renderDeleteButton(name, id, isTopic) {
         const itemName = name.length >= 15 ? `${name.substring(0, 15)}...` : name;
@@ -193,8 +186,30 @@ class ProjectDetails extends Component {
 
     }
 
+    renderTopics() {
+        const { topics } = this.props;
+        return (
+            topics && topics.length
+                ? <List
+                    bordered
+                    className="demo-loadmore-list"
+                    dataSource={topics}
+                    renderItem={item => (
+                        <Item key={item.id} actions={[this.renderDeleteButton(item.title, item.id, true)]}>
+                            <Item.Meta title={
+                                <Button type='link' onClick={() => this.props.openTopic(item)}>
+                                    {item.title}
+                                </Button>
+                            } />
+                        </Item>
+                    )}
+                />
+                : < Empty className="empty-topics" description="Esse projeto não possui tópicos." />
+        )
+    }
+
     render() {
-        const { project, topics, loading } = this.props;
+        const { project, loading } = this.props;
         return (
             <Card className='card_project'>
                 <PageHeader
@@ -202,7 +217,7 @@ class ProjectDetails extends Component {
                     title={project.name}
                     className="project_info"
                     extra={[
-                        this.renderEditButton(),
+                       // this.renderEditButton(),
                         this.renderDeleteButton(project.name, project.id)
                     ]}
                 >
@@ -223,25 +238,13 @@ class ProjectDetails extends Component {
                     </Tooltip>
                 </div>
                 <div className="list_container">
-                    {loading && topics
+                    {loading
                         ? (
                             <div className="load-container" >
                                 <Spin size="large" />
                             </div>
-                        ) : (<List
-                            bordered
-                            className="demo-loadmore-list"
-                            dataSource={topics}
-                            renderItem={item => (
-                                <Item key={item.id} actions={[this.renderDeleteButton(item.title, item.id, true)]}>
-                                    <Item.Meta title={
-                                        <Button type='link' onClick={() => this.props.openTopic(item)}>
-                                            {item.title}
-                                        </Button>
-                                    } />
-                                </Item>
-                            )}
-                        />)}
+                        ) : this.renderTopics()
+                    }
                 </div>
                 <Modal
                     title="Criar Topico"

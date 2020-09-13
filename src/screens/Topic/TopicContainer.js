@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Topic from './Topic';
 import { connect } from 'react-redux';
 import getReplays, { GET_REPLAYS_TOPIC_SUCCESS } from '~/store/getReplaysOfTopic/action';
+import deleteReplay, { DELETE_REPLAY_SUCCESS } from '~/store/deleteReplay/action';
 import { CREATE_REPLAY_SUCCESS } from '~/store/createReplay/action';
 
 class TopicContainer extends Component {
@@ -13,18 +14,29 @@ class TopicContainer extends Component {
         this.loadReplays();
     }
 
-    componentDidUpdate({ replays, createReplay }) {
+    componentDidUpdate({ replays, createReplay, removeReplay }) {
         (() => {
-            if (replays.type !== this.props.replays.type) {
-                if (this.props.replays.type === GET_REPLAYS_TOPIC_SUCCESS) {
+            const { type } = this.props.replays;
+            if (replays.type !== type) {
+                if (type === GET_REPLAYS_TOPIC_SUCCESS) {
                     this.setState({ replays: this.props.replays.payload })
                 }
 
             }
         })();
         (() => {
-            if (createReplay.type !== this.props.createReplay.type) {
-                if (this.props.createReplay.type === CREATE_REPLAY_SUCCESS) {
+            const { type } = this.props.createReplay;
+            if (createReplay.type !== type) {
+                if (type === CREATE_REPLAY_SUCCESS) {
+                    this.loadReplays()
+                }
+
+            }
+        })();
+        (() => {
+            const { type } = this.props.removeReplay;
+            if (removeReplay.type !== type) {
+                if (type === DELETE_REPLAY_SUCCESS) {
                     this.loadReplays()
                 }
 
@@ -37,24 +49,22 @@ class TopicContainer extends Component {
         dispatch(getReplays(topic.id));
     }
 
-    /* loadTopic = async () => {
-        const { id } = this.props.match.params;
-        try {
-            const response = await api().get(`/topics/${id}`);
-            this.setState({
-                topic: response.data,
-                loading: false,
-            });
-        } catch{ }
-    } */
+    removeReplay = (item) => {
+        this.props.dispatch(deleteReplay(item))
+    }
 
     render() {
-        const { loading } = this.props.replays
+        const { loading } = this.props.replays;
+        const deleteReplayloading = this.props.removeReplay.loading;
+
         return (
             <Topic
                 {...this.props}
                 loading={loading}
+                deleteReplayloading={deleteReplayloading}
+                loadReplays={this.loadReplays}
                 replays={this.state.replays}
+                removeReplay={this.removeReplay}
             />
         );
     }
@@ -63,7 +73,9 @@ class TopicContainer extends Component {
 function mapStateToProps(state) {
     return {
         replays: state.getReplaysOfTopic,
+        removeReplay: state.deleteReplay,
         createReplay: state.createReplay,
+        account: state.account,
     }
 }
 

@@ -1,7 +1,19 @@
+.replay {
+  display: flex;
+  width: 100%;
+}
+
+.my_replay {
+  justify-content: flex-end;
+}
+
+.replays-title {
+  font-weight: 600;
+}
+
 .replay-card {
-  max-width: 80%;
-  min-width: 350px;
-  /* border: 1.5px solid #e3e3e3; */
+  max-width: 70%;
+  min-width: 420px;
   background-color: #fff;
   border-radius: 8px;
   font-size: 16px;
@@ -11,6 +23,7 @@
 
 .card-header {
   display: flex;
+  align-items: center;
   border-bottom: 1px solid #e8e8e8;
 }
 
@@ -36,6 +49,15 @@
   padding: 2px;
 }
 
+.card-header .dropdown {
+  margin: 0 10px;
+}
+
+.icon {
+  padding: 6px;
+  border-radius: 100%;
+}
+
 .card-body {
   display: flex;
   flex-direction: column;
@@ -52,6 +74,19 @@
 }
 
 .card-body .desc {
-  margin: 8px 0;
+  margin: 14px 0;
+  font-size: 16px;
+}
+
+.card-body .link {
   font-size: 14px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+  font-size: 13px;
+  padding: 0 10px 10px;
+  color: #888;
 }
