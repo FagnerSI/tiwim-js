@@ -3,17 +3,16 @@ import {
     Button,
     Form,
     Input,
-    Tooltip,
     Modal,
     Row,
     Col,
-    Icon,
     Select,
 } from 'antd';
 import 'antd/dist/antd.css';
 
 import { isEmpty } from 'underscore';
 import Search from '~/common/SearchField';
+import getAtrrInArray from '~/common/getAtrrInArray';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -58,11 +57,43 @@ class ReplayModal extends Component {
         ...initState,
     }
 
-    onChangeValue = (value) => {
-        this.setState(value)
+    onChangeValue = (key) => (e) => {
+        const value = e.target ? e.target.value : e;
+        this.setState({ [key]: value })
     }
 
     onOpenModal = () => {
+        const { replay } = this.props;
+
+        if (replay) {
+            const {
+                url_details,
+                description,
+                kind_speech,
+                roles_for,
+                roles_in,
+            } = replay;
+
+            this.setState({
+                url_details,
+                description,
+                kind_speech,
+                roles_for,
+                roles_in
+            },
+                () => {
+                    this.props.form.setFieldsValue({
+                        url_details: this.state.url_details,
+                        description: this.state.description,
+                        kind_speech: this.state.kind_speech,
+                        roles_for: getAtrrInArray('id', this.state.roles_for),
+                        roles_in: String(this.state.roles_in.id)
+                    })
+                }
+
+            )
+        }
+
         this.setState({ visible: true });
     }
 
@@ -75,21 +106,12 @@ class ReplayModal extends Component {
     onSubmit = () => {
         this.props.form.validateFields((err, values) => {
             if (!err || isEmpty(err)) {
-                const {
-                    url_details,
-                    description,
-                    kind_speech,
-                    roles_for,
-                    roles_in
-                } = values;
+                if (this.props.replay) {
+                    this.props.onUpdateReplay(values)
+                } else {
+                    this.props.onCreateReplay(values)
+                }
 
-                this.props.onCreateReplay({
-                    url_details,
-                    description,
-                    kind_speech,
-                    roles_for,
-                    roles_in,
-                })
                 this.onCloseModal();
             }
         });
@@ -118,7 +140,7 @@ class ReplayModal extends Component {
                                 <Select
                                     allowClear
                                     placeholder="Selecione o tipo de fala"
-                                    onChange={kind_speech => this.onChangeValue({ kind_speech })}
+                                    onChange={this.onChangeValue('kind_speech')}
                                     showSearch
                                     optionFilterProp='children'
                                     filterOption={(input, option) =>
@@ -145,7 +167,7 @@ class ReplayModal extends Component {
                                 <Select
                                     allowClear
                                     placeholder="Selecione um papel"
-                                    onChange={roles_in => this.onChangeValue({ roles_in })}
+                                    onChange={this.onChangeValue('roles_in')}
                                     showSearch
                                     optionFilterProp='children'
                                     filterOption={(input, option) =>
@@ -171,14 +193,18 @@ class ReplayModal extends Component {
                             mode="multiple"
                             showArrow
                             placeholder="Selecione um papel"
-                            onChange={roles_for => this.onChangeValue({ roles_for })}
+                            onChange={this.onChangeValue('roles_for')}
                             showSearch
                             optionFilterProp='children'
                             filterOption={(input, option) =>
                                 Search(input, option.props.children)
                             }
                         >
-                            {project.roles.map(item => <Option key={item.id}>{item.name}</Option>)}
+                            {project.roles.map(item => {
+                                console.log("_----", typeof item.id)
+                                return <Option key={item.id}>{item.name}</Option>
+                            }
+                            )}
                         </Select>
                     )}
                 </Form.Item>
@@ -192,7 +218,7 @@ class ReplayModal extends Component {
                             name="description"
                             placeholder="Responder ao tópico"
                             autosize={{ minRows: 2, maxRows: 4 }}
-                            onChange={e => this.onChangeValue({ description: e.target.value })}
+                            onChange={this.onChangeValue('description')}
                         />,
                     )}
                 </Form.Item>
@@ -205,7 +231,7 @@ class ReplayModal extends Component {
                             name="url_description"
                             placeholder="Link para a descrição detalhada"
                             autosize={{ minRows: 1, maxRows: 3 }}
-                            onChange={e => this.onChangeValue({ url_details: e.target.value })}
+                            onChange={this.onChangeValue('url_details')}
                         />,
                     )}
                 </Form.Item>
@@ -214,25 +240,25 @@ class ReplayModal extends Component {
     }
 
     render() {
+        const { replay } = this.props;
+
         return (
             <>
-                <Tooltip placement="bottomLeft" title="Comentar">
-                    <Button
-                        size="large"
-                        type="primary"
-                        className="btn-new-replay"
-                        onClick={this.onOpenModal}
-                    >
-                        Comentar
-                    </Button>
-                </Tooltip>
+                <Button
+                    size={replay ? "default" : "large"}
+                    type={replay ? "link" : "primary"}
+                    className={replay ? '' : "btn-new-replay"}
+                    onClick={this.onOpenModal}
+                >
+                    {replay ? "Editar" : "Comentar"}
+                </Button>
                 <Modal
-                    title="Comentar Tópico"
+                    title={replay ? "Atualizar Comentário" : "Criar Comentário"}
                     visible={this.state.visible}
                     maskClosable={false}
                     onCancel={this.onCloseModal}
                     onOk={this.onSubmit}
-                    okText={'Enviar Comentário'}
+                    okText={replay ? "Aatualizar Comentário" : 'Enviar Comentário'}
                     centered={true}
                 >
                     {this.renderForm()}

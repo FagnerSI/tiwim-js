@@ -35,6 +35,7 @@ class Topic extends Component {
   renderLeftChild() {
     const { project, topic } = this.props;
     const { title, description, created_at } = topic;
+
     return (
       <div className="topic-details">
         <span className="topic-title">{title}</span>
@@ -54,11 +55,25 @@ class Topic extends Component {
   }
 
   renderReplay() {
-    const { replays, account, removeReplay } = this.props;
+    const {
+      project,
+      topic,
+      replays,
+      account,
+      removeReplay
+    } = this.props;
 
     return (
       replays && replays.length
-        ? replays.map(replay => <Replay replay={replay} removeReplay={removeReplay} account={account.payload} />)
+        ? replays.map(replay => (
+          <Replay
+            project={project}
+            topic={topic}
+            replay={replay}
+            removeReplay={removeReplay}
+            account={account.payload}
+          />
+        ))
         : (
           <div className="empty-container">
             <Empty className="empty" description="Esse tópico não possui comentários." />

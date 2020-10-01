@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
 import './style.css';
-import { Tag, Dropdown, Icon, Menu } from 'antd';
+import { Tag, Dropdown, Icon, Menu, Button } from 'antd';
 import kindSpeechs from '~/common/kindSpeechs';
-
+import ReplayModal from '~/screens/Topic/ReplayModal';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
 export default class Replay extends Component {
-
-
     render() {
-        const { replay, account, removeReplay } = this.props;
+        const { replay, account, removeReplay, topic, project } = this.props;
         const isMyReplay = account.email === replay.author.email;
 
         const menu = (
-            <Menu onClick={() => removeReplay(replay.id)}>
-                <Menu.Item key="1">
-                    Excluir
+            <Menu>
+                <Menu.Item key="1" >
+                    <Button type="link" onClick={removeReplay(replay.id)}>Excluir</Button>
                 </Menu.Item >
+                <Menu.Item key="2" >
+                    <ReplayModal project={project} topic={topic} replay={replay} />
+                </Menu.Item>
             </Menu>
         );
 
