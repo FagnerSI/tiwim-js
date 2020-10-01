@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import getReplays, { GET_REPLAYS_TOPIC_SUCCESS } from '~/store/getReplaysOfTopic/action';
 import deleteReplay, { DELETE_REPLAY_SUCCESS } from '~/store/deleteReplay/action';
 import { CREATE_REPLAY_SUCCESS } from '~/store/createReplay/action';
+import { UPDATE_REPLAY_SUCCESS } from '~/store/updateReplay/action';
 
 class TopicContainer extends Component {
     state = {
@@ -14,14 +15,13 @@ class TopicContainer extends Component {
         this.loadReplays();
     }
 
-    componentDidUpdate({ replays, createReplay, removeReplay }) {
+    componentDidUpdate({ replays, createReplay, removeReplay, updateReplay }) {
         (() => {
             const { type } = this.props.replays;
             if (replays.type !== type) {
                 if (type === GET_REPLAYS_TOPIC_SUCCESS) {
                     this.setState({ replays: this.props.replays.payload })
                 }
-
             }
         })();
         (() => {
@@ -30,7 +30,6 @@ class TopicContainer extends Component {
                 if (type === CREATE_REPLAY_SUCCESS) {
                     this.loadReplays()
                 }
-
             }
         })();
         (() => {
@@ -39,7 +38,14 @@ class TopicContainer extends Component {
                 if (type === DELETE_REPLAY_SUCCESS) {
                     this.loadReplays()
                 }
-
+            }
+        })();
+        (() => {
+            const { type } = this.props.updateReplay;
+            if (updateReplay.type !== type) {
+                if (type === UPDATE_REPLAY_SUCCESS) {
+                    this.loadReplays()
+                }
             }
         })();
     }
@@ -49,7 +55,7 @@ class TopicContainer extends Component {
         dispatch(getReplays(topic.id));
     }
 
-    removeReplay = (item) => {
+    removeReplay = (item) => () => {
         this.props.dispatch(deleteReplay(item))
     }
 
@@ -73,6 +79,7 @@ class TopicContainer extends Component {
 function mapStateToProps(state) {
     return {
         replays: state.getReplaysOfTopic,
+        updateReplay: state.updateReplay,
         removeReplay: state.deleteReplay,
         createReplay: state.createReplay,
         account: state.account,

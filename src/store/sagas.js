@@ -12,7 +12,9 @@ import getReplaysOfTopic from './getReplaysOfTopic/saga';
 import getTopictsProject from './getTopicsByProject/saga';
 import getProjects from './getProjects/saga';
 import getUsers from './getUsers/saga';
-import updateProject from './updateProject/saga';
+//import updateProject from './updateProject/saga';
+import updateReplay from './updateReplay/saga';
+import updateTopic from './updateTopic/saga';
 
 export default function* rootSaga() {
     yield all([
@@ -28,6 +30,8 @@ export default function* rootSaga() {
         getProjects(),
         getUsers(),
         getTopictsProject(),
-        updateProject(),
+        // updateProject(),
+        updateReplay(),
+        updateTopic(),
     ]);
 }
