@@ -52,10 +52,13 @@ class ProjectModal extends Component {
     }
 
     removeUserLoggedOfMembers = () => {
-        let members = getAtrrInArray("id", this.props.project.members);
-        let indexRemove = members.indexOf(this.props.account.id);
-        members.splice(indexRemove, 1);
-        return members;
+        const { project } = this.props;
+        if (project) {
+            let membersIds = getAtrrInArray("id", project.members);
+            let indexRemove = membersIds.indexOf(this.props.account.id);
+            membersIds.splice(indexRemove, 1);
+            return membersIds;
+        }
     }
 
     onOpenModal = () => {
@@ -64,7 +67,7 @@ class ProjectModal extends Component {
         getData();
         this.setState({ visible: true });
 
-        if (isUpdateProject) {
+        if (isUpdateProject && project) {
             this.setState(
                 {
                     name: project.name,
