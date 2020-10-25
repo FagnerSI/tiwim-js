@@ -52,9 +52,9 @@ class ProjectModal extends Component {
     }
 
     removeUserLoggedOfMembers = () => {
-        const { members } = this.props.project;
-        if (members) {
-            let membersIds = getAtrrInArray("id", members);
+        const { project } = this.props;
+        if (project) {
+            let membersIds = getAtrrInArray("id", project.members);
             let indexRemove = membersIds.indexOf(this.props.account.id);
             membersIds.splice(indexRemove, 1);
             return membersIds;
