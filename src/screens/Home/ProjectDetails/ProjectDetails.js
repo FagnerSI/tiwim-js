@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    Divider,
     Button,
     Spin,
     List,
@@ -18,17 +19,18 @@ import 'moment/locale/pt-br';
 
 import './style.css';
 
-const { Item } = List;
-
+function getSubstring(str, size) {
+    return str && str.length >= size ? `${str.substring(0, size)}...` : str
+}
 class ProjectDetails extends Component {
 
-    /* renderEditButton() {
+    renderEditButton() {
         const { project } = this.props;
         return (<ProjectModal project={project} isUpdateProject={true} />)
-    } */
+    }
 
     renderDeleteButton(name, id, isTopic) {
-        const itemName = name.length >= 15 ? `${name.substring(0, 15)}...` : name;
+        const itemName = getSubstring(name, 15);
 
         return (
             <Popconfirm
@@ -71,7 +73,7 @@ class ProjectDetails extends Component {
         const roles = this.props.project.roles || [];
         return (
             <div className="projetc-roles">
-                {roles.map((item) => <Tag color='blue'><div className="project-tag-roles">{item.name}</div></Tag>)}
+                {roles.map((item, i) => <Tag color='blue' key={i}><div className="project-tag-roles">{item.name}</div></Tag>)}
             </div>
         )
     }
@@ -80,7 +82,7 @@ class ProjectDetails extends Component {
         const members = this.props.project.members || [];
         return (
             <div className="projetc-roles">
-                {members.map((item) => <Tag>{item.name} - {item.email}</Tag>)}
+                {members.map((item, i) => <Tag key={i}>{item.name} - {item.email}</Tag>)}
             </div>
         )
     }
@@ -90,20 +92,23 @@ class ProjectDetails extends Component {
         return (
             topics && topics.length
                 ? <List
-                    bordered
                     className="demo-loadmore-list"
                     dataSource={topics}
-                    renderItem={item => (
-                        <Item key={item.id} actions={[
-                            <TopicModal project={project} topic={item} />,
-                            this.renderDeleteButton(item.title, item.id, true),
-                        ]}>
-                            <Item.Meta title={
-                                <Button type='link' onClick={() => this.props.openTopic(item)}>
-                                    {item.title}
-                                </Button>
-                            } />
-                        </Item>
+                    renderItem={(item, index) => (
+                        <div key={item.id} className="topic_item_container">
+                            <div className="topic_text" onClick={this.props.openTopic(item)}>
+                                {item.title}
+                                <span className={"topic_desc"}>
+                                    {getSubstring(item.description, 120)}
+                                </span>
+                            </div>
+                            <div>
+                                <Divider type="vertical" />
+                                <TopicModal project={project} topic={item} key={index} />
+                                <Divider type="vertical" />
+                                {this.renderDeleteButton(item.title, item.id, true)}
+                            </div>
+                        </div>
                     )}
                 />
                 : < Empty className="empty-topics" description="Esse projeto não possui tópicos." />
@@ -119,7 +124,7 @@ class ProjectDetails extends Component {
                     title={project.name}
                     className="project_info"
                     extra={[
-                        // this.renderEditButton(),
+                        this.renderEditButton(),
                         this.renderDeleteButton(project.name, project.id)
                     ]}
                 >

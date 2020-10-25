@@ -39,7 +39,7 @@
   display: inline-block;
   padding: 3px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .topic_list {
@@ -60,4 +60,36 @@
 
 .empty-topics {
   padding: 20px;
+}
+
+.topic_item_container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: solid #e0e0e0 1px;
+  border-left: solid 4px transparent;
+  box-sizing: border-box;
+  min-height: 70px;
+}
+
+.topic_item_container:hover {
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.3s;
+  color: #1890ff;
+  border-left: solid 4px #1890ff;
+}
+
+.topic_text {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  padding: 0 16px;
+  flex: 1;
+  line-height: 1.5;
+}
+
+.topic_desc {
+  font-size: 13px;
+  font-weight: 300;
 }
