@@ -45,3 +45,11 @@
   font-size: 18px;
   border-radius: 100%;
 }
+
+.loading_container_role {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
+  width: 100%;
+}

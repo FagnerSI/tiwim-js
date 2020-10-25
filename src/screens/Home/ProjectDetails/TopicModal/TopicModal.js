@@ -7,7 +7,6 @@ import {
     Select,
     Tooltip,
 } from 'antd';
-
 import { isEmpty } from 'underscore';
 import Search from '~/common/SearchField';
 import getAtrrInArray from '~/common/getAtrrInArray';

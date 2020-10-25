@@ -23,7 +23,8 @@ class Home extends Component<Props> {
     project: null,
   };
 
-  componentDidUpdate({ projects }) {
+  componentDidUpdate({ projects, isUpdateProject }) {
+
     if (isEmpty(this.props.projects) === false) {
       if (this.props.projects.length !== projects.length) {
         this.setState({
@@ -31,6 +32,13 @@ class Home extends Component<Props> {
           project: this.props.projects[0]
         }, () => this.props.getTopics(this.state.project.id))
       }
+    }
+
+    if (isUpdateProject !== this.props.isUpdateProject) {
+      console.log("====")
+      this.setState({
+        project: this.props.projects[this.state.current]
+      }, () => this.props.getTopics(this.state.project.id))
     }
 
   }

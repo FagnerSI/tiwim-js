@@ -68,7 +68,7 @@ class ProjectDetailsContainer extends Component {
         this.props.dispatch(deleteTopic(topicId));
     }
 
-    openTopic = (topic) => {
+    openTopic = (topic) => () => {
         this.props.history.push(
             getPath('Topic', [topic.id]),
             {
@@ -91,7 +91,7 @@ class ProjectDetailsContainer extends Component {
                 onDeleteProject={this.onDeleteProject}
                 onDeleteTopic={this.onDeleteTopic}
                 openTopic={this.openTopic}
-                topics={topics.reverse()}
+                topics={topics}
             />
         );
     }

@@ -22,7 +22,12 @@ class Header extends Component {
         return (
             <Menu>
                 <Menu.Item>
-                    <Button type="link" onClick={this.onLogout}>
+                    <Button type="link" icon="setting">
+                        Perfil
+                    </Button>
+                </Menu.Item>
+                <Menu.Item>
+                    <Button type="link" onClick={this.onLogout} icon="logout">
                         Sair
                     </Button>
                 </Menu.Item>
