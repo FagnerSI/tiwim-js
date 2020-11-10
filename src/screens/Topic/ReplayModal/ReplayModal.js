@@ -58,7 +58,7 @@ class ReplayModal extends Component {
     }
 
     onChangeValue = (key) => (e) => {
-        const value = e.target ? e.target.value : e;
+        const value = e && e.target ? e.target.value : e;
         this.setState({ [key]: value })
     }
 

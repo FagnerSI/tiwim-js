@@ -77,7 +77,7 @@
   box-sizing: border-box;
   transition: all 0.3s;
   color: #1890ff;
-  border-left: solid 4px #1890ff;
+  /*  border-left: solid 4px #1890ff; */
 }
 
 .topic_text {

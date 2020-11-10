@@ -22,7 +22,7 @@ const initState = {
     name: '',
     description: '',
     members: [],
-    roles: ['6'],
+    roles: [],
     roleValue: '',
     showRoles: true,
     visible: false,
