@@ -13,8 +13,9 @@ import getReplaysOfTopic from './getReplaysOfTopic/saga';
 import getTopictsProject from './getTopicsByProject/saga';
 import getProjects from './getProjects/saga';
 import getUsers from './getUsers/saga';
-import updateProject from './updateProject/saga';
 import getRoles from './getRoles/saga';
+import updateProject from './updateProject/saga';
+import updateAccount from './updateAccount/saga';
 import updateReplay from './updateReplay/saga';
 import updateTopic from './updateTopic/saga';
 
@@ -34,6 +35,7 @@ export default function* rootSaga() {
         getUsers(),
         getTopictsProject(),
         getRoles(),
+        updateAccount(),
         updateProject(),
         updateReplay(),
         updateTopic(),

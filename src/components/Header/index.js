@@ -4,6 +4,7 @@ import { compose } from 'recompose';
 import { withRouter } from 'react-router';
 import { Button, Dropdown, Menu } from 'antd';
 import { getRoute, routesNames } from '~/screens/routes';
+import AccountUpdate from '~/components/AccountUpdate';
 import './style.css';
 
 import {
@@ -12,18 +13,25 @@ import {
 
 
 class Header extends Component {
+    state = {
+        showAccount: false
+    }
 
     onLogout = () => {
         this.props.history.push(getRoute(routesNames.Login).path)
         this.props.dispatch(logout())
     }
 
+    toggleModalAccount = () => {
+        this.setState(({ showAccount }) => ({ showAccount: !showAccount }))
+    }
+
     renderMenu() {
         return (
             <Menu>
                 <Menu.Item>
-                    <Button type="link" icon="setting">
-                        Perfil
+                    <Button type="link" icon="user" onClick={this.toggleModalAccount}>
+                        Editar Perfil
                     </Button>
                 </Menu.Item>
                 <Menu.Item>
@@ -38,21 +46,26 @@ class Header extends Component {
         const { name } = this.props.account.payload;
         const shortName = name.split(' ', 2).join(' ');
 
-        return (
+        return [
             <div className="header">
                 <span>TiWIM</span>
                 <div className="profile-container">
                     <span className="profile-name">Olá, {shortName}</span>
                     <Dropdown overlay={this.renderMenu()} placement="bottomRight">
                         <Button
-                            type="primary"
-                            className="btn-circle-icon"
-                            icon="user"
+                            // type="primary"
+                            className="btn-circle-user"
+                            icon="setting"
                         />
                     </Dropdown>
                 </div>
-            </div>
-        )
+
+            </div>,
+            <AccountUpdate
+                visibility={this.state.showAccount}
+                onClose={this.toggleModalAccount}
+            />
+        ]
     }
 
 }

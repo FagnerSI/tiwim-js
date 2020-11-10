@@ -12,6 +12,24 @@ body {
   color: #333;
 }
 
+.ant-btn-background-ghost.ant-btn-primary {
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+.ant-btn-primary:hover {
+  border: solid 1px #1890ff !important;
+}
+
+.ant-btn-background-ghost.ant-btn-danger {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.ant-btn-danger:hover {
+  border: solid 1px #ff4d4f !important;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 6px;

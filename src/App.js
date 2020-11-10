@@ -34,7 +34,6 @@ class App extends Component<Props> {
       isAuthenticated: false,
       isLoading: true,
     };
-    //store.dispatch(account());
   }
 
   componentDidMount() {

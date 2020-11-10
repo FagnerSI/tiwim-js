@@ -30,9 +30,13 @@ export default class Replay extends Component {
                         <div className="user-replay">
                             <span>{replay.author.name}</span>
                         </div>
-                        <Dropdown className="dropdown" overlay={menu} trigger="click" placement="topLeft">
-                            <Icon type="more" className="icon" />
-                        </Dropdown>
+                        {
+                            isMyReplay && (
+                                <Dropdown className="dropdown" overlay={menu} trigger="click" placement="topLeft">
+                                    <Icon type="more" className="icon" />
+                                </Dropdown>
+                            )
+                        }
                     </div>
                     <div className="card-body">
                         <span className="roles">
