@@ -35,9 +35,26 @@
   height: 60vh;
 }
 
+.title_screen {
+  font-weight: 600;
+  display: block;
+  text-align: center;
+  padding: 16px;
+  margin: -16px -16px 16px -16px;
+  background: #fff;
+  color: rgba(0, 0, 0, 0.65);
+  box-shadow: 2px 2px 5px #0002;
+}
+
 .ant-menu-item-selected {
   font-weight: 600;
-  background-color: #f0f0f0 !important;
+  background-color: #f3f3f3 !important;
+}
+
+.ant-tabs-nav .ant-tabs-tab {
+  text-align: center;
+  width: 70%;
+  font-size: 16px;
 }
 
 .empty-project {

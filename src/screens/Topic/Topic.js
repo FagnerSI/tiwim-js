@@ -39,11 +39,16 @@ class Topic extends Component {
     return (
       <div className="topic-details">
         <span className="topic-title">{title}</span>
-        <span className="date"> {`Criado em ${moment(created_at).format('DD/MM/YYYY')}`}</span>
-        <div className="topic-desc">
-          <Text>{description}</Text>
+        <span className="date"> {`criado em ${moment(created_at).format('DD/MM/YYYY')}`}</span>
+        {
+          description &&
+          <div className="topic-desc">
+            <Text>{description}</Text>
+          </div>
+        }
+        <div className="container-replay-modal">
+          <ReplayModal project={project} topic={topic} />
         </div>
-        <ReplayModal project={project} topic={topic} />
       </div>
     )
   }
@@ -76,7 +81,7 @@ class Topic extends Component {
         ))
         : (
           <div className="empty-container">
-            <Empty className="empty" description="Esse tópico não possui comentários." />
+            <Empty className="empty" description="Esse tópico não possui comentários!" />
           </div>
         )
     )

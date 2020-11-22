@@ -1,12 +1,51 @@
 import React, { Component } from 'react';
 import './style.css';
-import { Tag, Dropdown, Icon, Menu, Button } from 'antd';
+import { Dropdown, Icon, Menu, Button } from 'antd';
 import kindSpeechs from '~/common/kindSpeechs';
 import ReplayModal from '~/screens/Topic/ReplayModal';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
 export default class Replay extends Component {
+
+    state = {
+        showAllRoles: false,
+    }
+
+    toggleShowAllRoles = () => {
+        this.setState(({ showAllRoles }) => ({ showAllRoles: !showAllRoles }))
+    }
+
+    renderRolesFor() {
+        const { roles_for } = this.props.replay;
+        const isMoreRoles = roles_for.length > 1;
+        const isComma = index => isMoreRoles && index !== roles_for.length - 1;
+
+        return (
+            <span>
+                {roles_for.map(
+                    (item, i) => {
+                        if (!this.state.showAllRoles && i !== 0) {
+                            return null;
+                        }
+                        return <b> {item.name}{isComma(i) && ','}</b>
+                    }
+                )}
+                {
+                    isMoreRoles
+                    && <Button
+                        type="link"
+                        size="small"
+                        onClick={this.toggleShowAllRoles}
+                    >
+                        {this.state.showAllRoles ? 'ver menos' : 'mais...'}
+                    </Button>
+                }
+            </span>
+        )
+
+    }
+
     render() {
         const { replay, account, removeReplay, topic, project } = this.props;
         const isMyReplay = account.email === replay.author.email;
@@ -26,9 +65,13 @@ export default class Replay extends Component {
             <div className={["replay", isMyReplay && 'my_replay '].join(' ')}>
                 <div className="replay-card">
                     <div className="card-header">
-                        <span className="kind-speech">{kindSpeechs[replay.kind_speech]}</span>
-                        <div className="user-replay">
-                            <span>{replay.author.name}</span>
+                        <div className="info-replay">
+                            <span className="kind-speech">
+                                {kindSpeechs[replay.kind_speech]}:
+                            </span> O(A) <b>{replay.author.name.split(" ", 1)} </b>
+                                no papel <b>{replay.roles_in.name} </b>
+                                para {this.renderRolesFor()}
+
                         </div>
                         {
                             isMyReplay && (
@@ -39,24 +82,16 @@ export default class Replay extends Component {
                         }
                     </div>
                     <div className="card-body">
-                        <span className="roles">
-                            <span className="role-in">
-                                <b>No papel: </b><Tag>{replay.roles_in.name}</Tag>
-                            </span>
-                            <b>Para: </b>
-                            {replay.roles_for.map(item => <Tag>{item.name}</Tag>)}
-                        </span>
-                        <p className="desc">{replay.description}</p>
-                        {
-                            replay.url_details &&
-                            <div className="link">Link:
-                                <a href={replay.url_details}> {replay.url_details}</a>
-                            </div>
-
-                        }
+                        <div className="desc">{replay.description}</div>
                     </div>
                     <div className="card-footer">
                         <span>{`criado em ${moment(replay.created_at).format('DD/MM/YYYY')}`}</span>
+                        {
+                            replay.url_details &&
+                            <div className="link">
+                                <a href={replay.url_details}>Ver detalhamento</a>
+                            </div>
+                        }
                     </div>
                 </div>
             </div >

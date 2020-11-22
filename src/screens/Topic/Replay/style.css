@@ -7,50 +7,50 @@
   justify-content: flex-end;
 }
 
-.replays-title {
-  font-weight: 600;
-}
-
 .replay-card {
   max-width: 70%;
   min-width: 420px;
   background-color: #fff;
   border-radius: 8px;
   font-size: 16px;
-  margin-bottom: 16px;
+  margin: 10px 0;
   box-shadow: 1px 2px 5px #0002;
 }
 
 .card-header {
   display: flex;
-  align-items: center;
+  padding: 12px;
   border-bottom: 1px solid #e8e8e8;
 }
 
-.card-header .kind-speech {
-  text-align: center;
-  border-radius: 4px 0 0;
-  margin-right: 24px;
-  padding: 8px;
-  font-weight: 500;
-  color: #fff;
-  background-color: #222222b4;
-  width: 180px;
-  box-sizing: border-box;
+.card-header .info-replay {
+  font-size: 13px;
+  font-weight: 300;
+  width: 100%;
 }
 
-.card-header .user-replay {
-  display: flex;
-  width: 100%;
+.card-header .kind-speech {
   font-size: 15px;
   font-weight: 600;
-  align-items: center;
-  justify-content: center;
-  padding: 2px;
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .card-header .dropdown {
-  margin: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 30px;
+  width: 30px;
+  padding: 8px;
+  margin: -8px -8px -8px -4px;
+  transition: all 1s;
+}
+
+.card-header .dropdown:hover {
+  background-color: rgb(240, 240, 240);
+  border-radius: 100%;
+  transition: all 1s;
 }
 
 .icon {
@@ -61,9 +61,10 @@
 .card-body {
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 0 10px;
 }
 
+/* 
 .card-body .roles {
   font-size: 14px;
 }
@@ -71,22 +72,32 @@
 .card-body .role-in {
   width: 180px;
   margin-right: 30px;
-}
+}*/
 
 .card-body .desc {
-  margin: 14px 0;
-  font-size: 16px;
-}
+  font-size: 18px;
 
-.card-body .link {
-  font-size: 14px;
+  background-color: #fafafaf6;
+  border: solid 0.5px #0001;
+  color: rgba(0, 0, 0, 0.7);
+  border-radius: 0 0 6px 6px;
+  padding: 8px;
 }
 
 .card-footer {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: flex-end;
   flex: 1;
-  font-size: 13px;
-  padding: 0 10px 10px;
-  color: #888;
+  font-size: 11px;
+  font-weight: 300;
+  padding: 8px 10px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.card-footer .link {
+  font-size: 14px;
+  padding: 0 6px;
+  font-weight: 400;
 }
