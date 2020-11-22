@@ -145,7 +145,7 @@ class ProjectDetails extends Component {
                         </div>
                     )}
                 />
-                : < Empty className="empty-topics" description="Esse projeto não possui tópicos." />
+                : <Empty className="empty-topics" description="Esse projeto não possui tópicos." />
 
         )
     }

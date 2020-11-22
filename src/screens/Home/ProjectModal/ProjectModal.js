@@ -221,29 +221,6 @@ class ProjectModal extends Component {
         const { roles, roleValue, inputRoleVisible } = this.state;
         return (
             <div className="tag-roles-container">
-                <Form colon={false}>
-                    <Form.Item label="Selecione Papeis">
-                        <Select
-                            allowClear
-                            mode="multiple"
-                            value={roles}
-                            showArrow={true}
-                            style={{ width: '100%' }}
-                            placeholder="Selecione papeis para projeto"
-                            onChange={this.onChangeValue('roles')}
-                            showSearch
-                            optionFilterProp='children'
-                            filterOption={(input, option) =>
-                                Search(input, option.props.children)
-                            }
-                        >
-                            {
-                                this.props.allRoles.map(
-                                    role => <Option key={role.id}>{role.name}</Option>)
-                            }
-                        </Select>
-                    </Form.Item>
-                </Form>
                 {
                     this.props.loading
                         ? (
@@ -253,6 +230,29 @@ class ProjectModal extends Component {
                         )
                         : (
                             <>
+                                <Form colon={false}>
+                                    <Form.Item label="Selecione Papeis">
+                                        <Select
+                                            allowClear
+                                            mode="multiple"
+                                            value={roles}
+                                            showArrow={true}
+                                            style={{ width: '100%' }}
+                                            placeholder="Selecione papeis para projeto"
+                                            onChange={this.onChangeValue('roles')}
+                                            showSearch
+                                            optionFilterProp='children'
+                                            filterOption={(input, option) =>
+                                                Search(input, option.props.children)
+                                            }
+                                        >
+                                            {
+                                                this.props.allRoles.map(
+                                                    role => <Option key={role.id}>{role.name}</Option>)
+                                            }
+                                        </Select>
+                                    </Form.Item>
+                                </Form>
                                 <Divider>
                                     <Button
                                         onClick={this.showInputRole}
