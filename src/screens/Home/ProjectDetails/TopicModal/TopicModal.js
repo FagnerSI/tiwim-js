@@ -23,9 +23,10 @@ class TopicModal extends Component {
     };
 
     removeUserLoggedOfMembers = () => {
-        let members = getAtrrInArray("id", this.state.members);
+        let members = getAtrrInArray("id", this.props.topic.members);
         let indexRemove = members.indexOf(this.props.account.id);
         members.splice(indexRemove, 1);
+
         return members;
     }
 
@@ -61,6 +62,7 @@ class TopicModal extends Component {
         this.setState({
             visible: false,
         });
+        this.props.form.resetFields()
     };
 
     onChange = (key) => (e) => {
@@ -165,13 +167,14 @@ class TopicModal extends Component {
                 <Button
                     type="primary"
                     ghost={topic}
-                    icon={topic ? "edit" : "plus"}
-                    className={!topic && "btn-circle-icon"}
+                    icon={topic ? "edit" : ""}
                     onClick={this.onOpenModal}
-                />
+                >
+                    {topic ? '' : 'Criar tópico'}
+                </Button>
             </Tooltip>,
             <Modal
-                title={topic ? "Atualizar Tópico" : "Criar Tópico"}
+                title={topic ? `Atualizar - ${topic.title.substring(0, 70)}` : "Criar Tópico"}
                 visible={this.state.visible}
                 onOk={this.onCreateTopic}
                 okText={topic ? "Atualizar" : "Criar"}

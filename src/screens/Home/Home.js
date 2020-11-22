@@ -93,9 +93,12 @@ class Home extends Component<Props> {
     if (isEmpty(projectSelected)) return null;
 
     return (
-      <ProjectDetails
-        project={projectSelected}
-      />
+      <>
+        <span className="title_screen">DETALHES DO PROJETO</span>
+        <ProjectDetails
+          project={projectSelected}
+        />
+      </>
     )
   }
 

@@ -245,9 +245,9 @@ class ReplayModal extends Component {
         return (
             <>
                 <Button
+                    block
                     size={replay ? "default" : "large"}
                     type={replay ? "link" : "primary"}
-                    className={replay ? '' : "btn-new-replay"}
                     onClick={this.onOpenModal}
                 >
                     {replay ? "Editar" : "Comentar"}
