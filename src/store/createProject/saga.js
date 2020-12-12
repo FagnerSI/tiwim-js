@@ -9,7 +9,7 @@ function* createProject({ payload }) {
         let { data } = yield call(api().post, `/projects`, payload);
         yield put(success(data));
     } catch (error) {
-        yield put(failure("Não foi possivél criar o projeto!"));
+        yield put(failure("Não foi possivél criar a discussão!"));
     }
 }
 

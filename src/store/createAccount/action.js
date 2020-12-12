@@ -8,9 +8,14 @@ export function success(payload) {
     return { type: CREATE_ACCOUNT_SUCCESS, payload }
 }
 
-export function failure(error) {
-    message.error(error);
-    return { type: CREATE_ACCOUNT_FAILURE, payload: error }
+export function failure({ data }) {
+    const error = () => {
+        if (data['email']) return 'Já existe uma conta cadastrada com este e-mail.';
+        if (data['password']) return data['password'][0];
+    };
+
+    message.error(error() || 'Falha ou tentar criar conta');
+    return { type: CREATE_ACCOUNT_FAILURE, payload: data }
 }
 
 export default function createAccount({ name, email, password, confirmPassword }) {

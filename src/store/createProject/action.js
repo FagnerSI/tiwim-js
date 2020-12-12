@@ -4,7 +4,7 @@ export const CREATE_PROJECT_FAILURE = 'CREATE_PROJECT_FAILURE';
 export const CREATE_PROJECT_REQUEST = 'CREATE_PROJECT_REQUEST';
 
 export function success(payload) {
-    message.success(`O projeto foi criado com sucesso.`);
+    message.success(`A discussão foi criado com sucesso.`);
     return { type: CREATE_PROJECT_SUCCESS, payload }
 }
 

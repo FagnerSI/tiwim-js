@@ -9,7 +9,7 @@ function* createReplay({ payload }) {
         let { data } = yield call(api().post, `/replays`, payload);
         yield put(success(data));
     } catch (error) {
-        yield put(failure("Não foi enviar seu comentário!"));
+        yield put(failure("Não foi enviar sua mensagem!"));
     }
 }
 

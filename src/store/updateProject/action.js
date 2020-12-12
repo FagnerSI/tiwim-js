@@ -4,7 +4,7 @@ export const UPDATE_PROJECT_FAILURE = 'UPDATE_PROJECT_FAILURE';
 export const UPDATE_PROJECT_REQUEST = 'UPDATE_PROJECT_REQUEST';
 
 export function success(payload) {
-    message.success(`O projeto foi atualizado com sucesso.`);
+    message.success(`A discussão foi atualizado com sucesso.`);
     return { type: UPDATE_PROJECT_SUCCESS, payload }
 }
 

@@ -4,7 +4,7 @@ export const DELETE_PROJECT_FAILURE = 'DELETE_PROJECT_FAILURE';
 export const DELETE_PROJECT_REQUEST = 'DELETE_PROJECT_REQUEST';
 
 export function success(payload) {
-    message.success(`O projeto foi deletado.`);
+    message.success(`A discussão foi deletado.`);
     return { type: DELETE_PROJECT_SUCCESS, payload }
 }
 

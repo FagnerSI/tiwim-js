@@ -9,7 +9,7 @@ function* updateReplay({ payload }) {
         let { data } = yield call(api().patch, `/replays/${payload.id}`, payload);
         yield put(success(data));
     } catch (error) {
-        yield put(failure("Não foi possivél atualizar o comentário!"));
+        yield put(failure("Não foi possivél atualizar a mensagem!"));
     }
 }
 

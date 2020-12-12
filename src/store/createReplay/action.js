@@ -4,7 +4,7 @@ export const CREATE_REPLAY_FAILURE = 'CREATE_REPLAY_FAILURE';
 export const CREATE_REPLAY_REQUEST = 'CREATE_REPLAY_REQUEST';
 
 export function success(payload) {
-    message.success(`Comentário enviado com sucesso!`);
+    message.success(`Mensagem foi enviada com sucesso!`);
     return { type: CREATE_REPLAY_SUCCESS, payload }
 }
 

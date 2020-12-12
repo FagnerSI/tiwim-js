@@ -19,6 +19,7 @@ import updateAccount from './updateAccount/reducer';
 import updateProject from './updateProject/reducer';
 import updateReplay from './updateReplay/reducer';
 import updateTopic from './updateTopic/reducer';
+import getLastReplayOfUser from './getLastReplayOfUser/reducer';
 
 export default combineReducers({
     account,
@@ -40,4 +41,5 @@ export default combineReducers({
     updateProject,
     updateReplay,
     updateTopic,
+    getLastReplayOfUser,
 });
