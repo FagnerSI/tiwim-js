@@ -30,6 +30,17 @@ body {
   border: solid 1px #ff4d4f !important;
 }
 
+.ant-menu-item-selected {
+  font-weight: 600;
+  background-color: #f3f3f3 !important;
+}
+
+.ant-tabs-nav .ant-tabs-tab {
+  text-align: center;
+  width: 90%;
+  font-size: 16px;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 6px;

@@ -59,7 +59,7 @@ class ProjectDetails extends Component {
                 okText="Sim"
                 cancelText="Não"
             >
-                <Tooltip placement="top" title={`Deletar ${isTopic ? 'Tópico' : 'Projeto'}`}>
+                <Tooltip placement="top" title={`Deletar ${isTopic ? 'Tópico' : 'Discussão'}`}>
                     <Button
                         type="danger"
                         icon="delete"
@@ -145,7 +145,7 @@ class ProjectDetails extends Component {
                         </div>
                     )}
                 />
-                : <Empty className="empty-topics" description="Esse projeto não possui tópicos." />
+                : <Empty className="empty-topics" description="Essa discussão não possui tópicos." />
 
         )
     }
@@ -172,7 +172,7 @@ class ProjectDetails extends Component {
     renderTabs() {
         const tabs = [
             {
-                title: "Tópicos de discussão",
+                title: "Tópicos",
                 component: this.renderListTopics(),
             },
             {

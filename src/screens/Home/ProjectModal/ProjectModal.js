@@ -136,17 +136,17 @@ class ProjectModal extends Component {
 
         return (
             <Form colon={false}>
-                <Form.Item label="Nome">
+                <Form.Item label="Título">
                     {getFieldDecorator('name', {
                         rules: [{
                             required: true,
-                            message: 'Digite o nome do projeto'
+                            message: 'Digite o título da discussão'
                         }],
                     }
                     )(<Input
                         name="name"
                         allowClear
-                        placeholder="Nome do projeto"
+                        placeholder="Título da discussão"
                         onChange={this.onChangeValue('name')}
                     />,
                     )}
@@ -158,7 +158,7 @@ class ProjectModal extends Component {
                     )(
                         <TextArea
                             name="description"
-                            placeholder="Descrição do projeto"
+                            placeholder="Descrição da discussão"
                             autoSize={{ minRows: 2, maxRows: 4 }}
                             onChange={this.onChangeValue('description')}
                         />,
@@ -238,7 +238,7 @@ class ProjectModal extends Component {
                                             value={roles}
                                             showArrow={true}
                                             style={{ width: '100%' }}
-                                            placeholder="Selecione papeis para projeto"
+                                            placeholder="Selecione papeis para discussão"
                                             onChange={this.onChangeValue('roles')}
                                             showSearch
                                             optionFilterProp='children'
@@ -300,17 +300,16 @@ class ProjectModal extends Component {
 
         return (
             <>
-                <Tooltip placement='bottomRight' title={isUpdateProject ? "Atualizar Projeto" : "Criar novo Projeto"}>
+                <Tooltip placement='bottomRight' title={isUpdateProject ? "Atualizar Discussão" : "Criar nova Discussão"}>
                     <Button
                         type={"primary"}
                         ghost={isUpdateProject}
                         icon={isUpdateProject ? "edit" : "plus"}
-                        className={isUpdateProject ? "" : "btn-circle-icon"}
                         onClick={this.onOpenModal}
                     />
                 </Tooltip>
                 <Modal
-                    title={isUpdateProject ? "Editar Projeto" : "Criar Projeto"}
+                    title={isUpdateProject ? "Editar Discussão" : "Criar Discussão"}
                     visible={this.state.visible}
                     maskClosable={false}
                     onCancel={this.onCloseModal}

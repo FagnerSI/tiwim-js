@@ -3,7 +3,7 @@ import Text from 'react-format-text';
 import { Button, Tooltip, Spin, Empty } from 'antd';
 import moment from 'moment';
 import 'moment/locale/pt-br';
-import { Header, MainLayout, } from '~/components';
+import { MainLayout, } from '~/components';
 import Replay from './Replay';
 import ReplayModal from './ReplayModal';
 import './style.css';
@@ -19,10 +19,9 @@ class Topic extends Component {
 
     return (
       <div className='project-header'>
-        <Tooltip placement="bottomLeft" title="Ir para Projetos">
+        <Tooltip placement="bottomLeft" title="Ir para suas Discussões">
           <Button
             type="primary"
-            className="btn-circle-icon"
             icon="arrow-left"
             onClick={history.goBack}
           />
@@ -55,7 +54,7 @@ class Topic extends Component {
 
   renderRightHeader() {
     return (
-      <Header />
+      <span className="replays-title">MENSAGENS</span>
     )
   }
 
@@ -81,7 +80,7 @@ class Topic extends Component {
         ))
         : (
           <div className="empty-container">
-            <Empty className="empty" description="Esse tópico não possui comentários!" />
+            <Empty className="empty" description="Esse tópico não possui mensagens!" />
           </div>
         )
     )
@@ -92,13 +91,12 @@ class Topic extends Component {
 
     return (
       <>
-        <span className="replays-title">COMENTÁRIOS</span>
         <div className="replays-container">
           {deleteReplayloading
             ? <Spin size="large" />
             : this.renderReplay()
           }
-          <Tooltip title="Atualizar comentários" placement="left">
+          <Tooltip title="Atualizar mensagem" placement="left">
             <Button
               size="large"
               type="primary"
