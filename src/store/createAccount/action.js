@@ -5,6 +5,7 @@ export const CREATE_ACCOUNT_FAILURE = 'CREATE_ACCOUNT_FAILURE';
 export const CREATE_ACCOUNT_REQUEST = 'CREATE_ACCOUNT_REQUEST';
 
 export function success(payload) {
+    message.success("Conta criada com sucesso!")
     return { type: CREATE_ACCOUNT_SUCCESS, payload }
 }
 

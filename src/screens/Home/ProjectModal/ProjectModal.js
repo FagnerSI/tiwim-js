@@ -1,64 +1,41 @@
 import React, { Component } from 'react';
 import {
-    Spin,
     Button,
     Form,
-    Input,
     Tooltip,
     Modal,
-    Tag,
-    Select,
-    Divider,
 } from 'antd';
-import { isEmpty } from 'underscore';
-import 'antd/dist/antd.css';
-import Search from '~/common/SearchField';
+import { InfosBasic, Roles, Members } from './components';
 import getAtrrInArray from '~/common/getAtrrInArray';
-
-const { TextArea } = Input;
-const { Option } = Select;
+import 'antd/dist/antd.css';
 
 const initState = {
     name: '',
     description: '',
     members: [],
     roles: [],
-    roleValue: '',
-    showRoles: true,
+    indexStep: 0,
     visible: false,
-    inputRoleVisible: false,
 }
 
-class ProjectModal extends Component {
+const steps = [
+    {
+        title: 'Dados da discussão',
+        component: 'BASIC',
+    },
+    {
+        title: 'Adicionar papeis',
+        component: 'ROLES',
+    },
+    {
+        title: 'Adicionar membros',
+        component: 'MEMBERS'
+    },
+]
 
+class ProjectModal extends Component {
     state = {
         ...initState,
-    }
-
-    componentWillUpdate({ currentRoleId }) {
-        if (currentRoleId !== this.props.currentRoleId) {
-            if (currentRoleId) {
-                this.setState(({ roles }) => ({
-                    roles: [...roles, String(currentRoleId)],
-                    roleValue: '',
-                }))
-            }
-        }
-    }
-
-    onChangeValue = (field) => (e) => {
-        const value = e && e.target ? e.target.value : e;
-        this.setState({ [field]: value })
-    }
-
-    removeUserLoggedOfMembers = () => {
-        const { project } = this.props;
-        if (project) {
-            let membersIds = getAtrrInArray("id", project.members);
-            let indexRemove = membersIds.indexOf(this.props.account.id);
-            membersIds.splice(indexRemove, 1);
-            return membersIds;
-        }
     }
 
     onOpenModal = () => {
@@ -79,224 +56,123 @@ class ProjectModal extends Component {
         };
     };
 
+
+    removeUserLoggedOfMembers = () => {
+        const { project } = this.props;
+        if (project) {
+            let membersIds = getAtrrInArray("id", project.members);
+            let indexRemove = membersIds.indexOf(this.props.account.id);
+            membersIds.splice(indexRemove, 1);
+            return membersIds;
+        }
+    }
+
     onCloseModal = () => {
         this.setState({ ...initState });
-        this.props.form.resetFields()
     };
 
-    toggleShowRoles = () => {
-        this.setState(({ showRoles }) => ({ showRoles: !showRoles }),
-            () => {
-                this.props.form.setFieldsValue({
-                    name: this.state.name,
-                    description: this.state.description,
-                    members: this.removeUserLoggedOfMembers(),
-                })
-            }
-        )
-    };
-
-    onCreateRole = () => {
-        this.props.onCreateRole(this.state.roleValue)
+    onSuccess = (values) => {
+        this.setState({
+            ...values
+        }, () => this.onNext());
     }
 
-    removeRole = (removedRole) => () => {
-        // eslint-disable-next-line eqeqeq
-        const roles = this.state.roles.filter(role => role != removedRole.id);
-        this.setState({ roles });
-    };
+    onPrevious = () => {
+        const { indexStep } = this.state;
+        this.setState({ indexStep: indexStep - 1 })
+    }
 
-    showInputRole = () => {
-        this.setState(
-            ({ inputRoleVisible }) => ({ inputRoleVisible: !inputRoleVisible }),
-            () => this.inputRole && this.inputRole.focus()
-        );
-    };
+    onNext = () => {
+        const { indexStep } = this.state;
+
+        if (indexStep === steps.length - 1) {
+            return this.onSubmit();
+        } else {
+            this.setState({ indexStep: indexStep + 1 })
+        }
+    }
 
     onSubmit = () => {
-        this.props.form.validateFields((err, values) => {
-            if (!err || isEmpty(err)) {
-                const { members, roles } = this.state;
-                members.push(this.props.account.id);
+        let {
+            name, description, members, roles
+        } = this.state;
 
-                if (this.props.isUpdateProject) {
-                    this.props.onUpdateProject({ ...values, members, roles })
-                } else {
-                    this.props.onCreateProject({ ...values, members, roles })
-                }
-                this.onCloseModal();
-            }
-        });
+        members.push(this.props.account.id);
 
+        this.props.onSuccess({
+            name, description, members, roles
+        })
+
+        this.onCloseModal();
     }
 
-    renderForm() {
-        const { users, form, allRoles } = this.props;
-        const { getFieldDecorator } = form;
-
+    renderBasic() {
+        const {
+            name,
+            description
+        } = this.state;
         return (
-            <Form colon={false}>
-                <Form.Item label="Título">
-                    {getFieldDecorator('name', {
-                        rules: [{
-                            required: true,
-                            message: 'Digite o título da discussão'
-                        }],
-                    }
-                    )(<Input
-                        name="name"
-                        allowClear
-                        placeholder="Título da discussão"
-                        onChange={this.onChangeValue('name')}
-                    />,
-                    )}
-                </Form.Item>
-                <Form.Item label="Descrição">
-                    {getFieldDecorator('description', {
-                        rules: [{ message: 'Digite uma descrição' }],
-                    }
-                    )(
-                        <TextArea
-                            name="description"
-                            placeholder="Descrição da discussão"
-                            autoSize={{ minRows: 2, maxRows: 4 }}
-                            onChange={this.onChangeValue('description')}
-                        />,
-                    )}
-                </Form.Item>
-                <Form.Item label="Convidados">
-                    {getFieldDecorator('members', {
-                        rules: [{
-                            required: true,
-                            message: 'Selecione convidados'
-                        }],
-                    }
-                    )(
-                        <Select
-                            allowClear
-                            mode="multiple"
-                            showArrow={true}
-                            style={{ width: '100%' }}
-                            placeholder="Selecione convidados"
-                            onChange={this.onChangeValue('members')}
-                            showSearch
-                            optionFilterProp='children'
-                            filterOption={(input, option) =>
-                                Search(input, option.props.children)
-                            }
-                        >
-                            {users.map(user => <Option key={user.id}>{user.email}</Option>)}
-                        </Select>
-                    )}
-                </Form.Item>
-                <div className="tag-roles-container">
-                    {allRoles.filter(
-                        item => this.state.roles.includes(String(item.id))
-                    ).map((role, index) => {
-                        const isLongTag = role.length > 20;
-                        const tagElem = (
-                            <Tag
-                                key={index}
-                                closable={index !== 0}
-                                color="blue"
-                                onClose={this.removeRole(role)}
-                            >
-                                <div className="tag-roles">{isLongTag ? `${role.name.slice(0, 20)}...` : role.name}</div>
-                            </Tag>
-                        );
-                        return isLongTag ? (
-                            <Tooltip key={index} title={role.name}>
-                                {tagElem}
-                            </Tooltip>
-                        ) : (
-                                tagElem
-                            );
-                    })}
-                </div>
-            </Form >
+            <InfosBasic
+                name={name}
+                description={description}
+                onSuccess={this.onSuccess}
+            />
         )
     }
 
     renderRoles() {
-        const { roles, roleValue, inputRoleVisible } = this.state;
+        const {
+            onCreateRole,
+            allRoles,
+            currentRoleId,
+            loading,
+        } = this.props
         return (
-            <div className="tag-roles-container">
-                {
-                    this.props.loading
-                        ? (
-                            <div className="loading_container_role" >
-                                <Spin size="large" />
-                            </div>
-                        )
-                        : (
-                            <>
-                                <Form colon={false}>
-                                    <Form.Item label="Selecione Papeis">
-                                        <Select
-                                            allowClear
-                                            mode="multiple"
-                                            value={roles}
-                                            showArrow={true}
-                                            style={{ width: '100%' }}
-                                            placeholder="Selecione papeis para discussão"
-                                            onChange={this.onChangeValue('roles')}
-                                            showSearch
-                                            optionFilterProp='children'
-                                            filterOption={(input, option) =>
-                                                Search(input, option.props.children)
-                                            }
-                                        >
-                                            {
-                                                this.props.allRoles.map(
-                                                    role => <Option key={role.id}>{role.name}</Option>)
-                                            }
-                                        </Select>
-                                    </Form.Item>
-                                </Form>
-                                <Divider>
-                                    <Button
-                                        onClick={this.showInputRole}
-                                        type="link"
-                                    >
-                                        Ou crie um papel
-                                    </Button>
-                                </Divider>
-                                {
-                                    inputRoleVisible &&
-                                    <Form colon={false}>
-                                        <Form.Item label="Nome do Papel">
-                                            <Input
-                                                ref={ref => this.inputRole = ref}
-                                                placeholder="Digite o nome do papel"
-                                                type="text"
-                                                value={roleValue}
-                                                onChange={this.onChangeValue('roleValue')}
-                                                onPressEnter={this.onCreateRole}
-                                            />
-                                        </Form.Item>
-                                        <Form.Item>
-                                            <Button
-                                                type="primary"
-                                                onClick={this.onCreateRole}
-                                                disabled={!roleValue}
-                                            >
-                                                Criar Papel
-                                    </Button>
-                                        </Form.Item>
-                                    </Form>
-                                }
-                            </>
-                        )
-                }
-            </div>
-        );
+            <Roles
+                loading={loading}
+                allRoles={allRoles}
+                roles={this.state.roles}
+                currentRoleId={currentRoleId}
+                onCreateRole={onCreateRole}
+                onPrevious={this.onPrevious}
+                onSuccess={this.onSuccess}
+            />
+        )
+    }
+
+    renderMembers() {
+        const {
+            users,
+            loading,
+            currentMemberId,
+            onCreateAccount,
+            isUpdateProject,
+        } = this.props
+
+        return (
+            <Members
+                isUpdateProject={isUpdateProject}
+                loading={loading}
+                users={users}
+                members={this.state.members}
+                currentMemberId={currentMemberId}
+                onCreateAccount={onCreateAccount}
+                onPrevious={this.onPrevious}
+                onSuccess={this.onSuccess}
+            />
+        )
     }
 
     render() {
         const { isUpdateProject } = this.props
-        const { showRoles } = this.state;
+        const { indexStep } = this.state;
+        const currentStep = steps[indexStep];
 
-        const okTextSecondary = isUpdateProject ? 'Atualizar' : 'Criar';
+        const stepsComponnets = {
+            BASIC: this.renderBasic(),
+            ROLES: this.renderRoles(),
+            MEMBERS: this.renderMembers(),
+        };
 
         return (
             <>
@@ -313,11 +189,15 @@ class ProjectModal extends Component {
                     visible={this.state.visible}
                     maskClosable={false}
                     onCancel={this.onCloseModal}
-                    onOk={showRoles ? this.toggleShowRoles : this.onSubmit}
-                    okText={showRoles ? 'Continuar' : okTextSecondary}
+                    footer={null}
                     centered={true}
                 >
-                    {showRoles ? this.renderRoles() : this.renderForm()}
+
+                    <h3 style={{ textAlign: 'center' }}>
+                        {steps[indexStep].title}
+                    </h3>
+                    {stepsComponnets[currentStep.component]}
+
                 </Modal>
             </>
         );

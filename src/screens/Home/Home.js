@@ -14,9 +14,7 @@ type Props = {
   onloadProject: () => void,
   onCreateProject: () => void,
 }
-
 class Home extends Component<Props> {
-
   state = {
     current: '0',
     project: null,
