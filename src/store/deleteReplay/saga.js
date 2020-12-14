@@ -9,7 +9,7 @@ function* deleteReplay({ payload }) {
         let { data } = yield call(api().delete, `/replays/${payload}`);
         yield put(success(data));
     } catch (error) {
-        yield put(failure("Não foi remover o comentário!"));
+        yield put(failure("Não foi remover a mensagem!"));
     }
 }
 

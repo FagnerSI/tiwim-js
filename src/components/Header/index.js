@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { withRouter } from 'react-router';
+import { logo_white } from '~/assets'
 import { Button, Dropdown, Menu } from 'antd';
 import { getRoute, routesNames } from '~/screens/routes';
 import AccountUpdate from '~/components/AccountUpdate';
@@ -48,7 +49,14 @@ class Header extends Component {
 
         return [
             <div className="header">
-                <span>TiWIM</span>
+                <div className="header-logo-container">
+                    <img
+                        src={logo_white}
+                        className="header-logo"
+                        alt="Logo da plataforma"
+                    />
+                    <span className="header-logo-subtitle">This is What I Mean</span>
+                </div>
                 <div className="profile-container">
                     <span className="profile-name">Olá, {shortName}</span>
                     <Dropdown overlay={this.renderMenu()} placement="bottomRight">

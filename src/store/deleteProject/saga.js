@@ -9,7 +9,7 @@ function* deleteProject({ payload }) {
         let { data } = yield call(api().delete, `/projects/${payload}`);
         yield put(success(data));
     } catch (error) {
-        yield put(failure("Não foi possivél deletar o projeto!"));
+        yield put(failure("Não foi possivél deletar a discussão!"));
     }
 }
 

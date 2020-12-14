@@ -42,7 +42,12 @@ class LoginContainer extends Component {
     }
 
     render() {
-        return <Login onLogin={this.onLogin} onCreateAccount={this.onCreateAccount} />;
+        const loading = this.props.authentication.loading || this.props.createAccount.loading;
+        return <Login
+            loading={loading}
+            onLogin={this.onLogin}
+            onCreateAccount={this.onCreateAccount}
+        />;
     }
 }
 

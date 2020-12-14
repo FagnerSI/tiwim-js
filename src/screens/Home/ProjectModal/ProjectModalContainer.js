@@ -1,11 +1,12 @@
 /* eslint-disable no-sequences */
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-
+import { message } from 'antd';
 import updateProject from '~/store/updateProject/action';
 import createProject from '~/store/createProject/action';
 import getUsers, { GET_USERS_SUCCESS } from '~/store/getUsers/action';
 import getRoles, { GET_ROLES_SUCCESS } from '~/store/getRoles/action';
+import createAccount, { CREATE_ACCOUNT_SUCCESS } from '~/store/createAccount/action';
 import createRole, { CREATE_ROLE_SUCCESS } from '~/store/createRole/action';
 import ProjectModal from './ProjectModal';
 
@@ -15,10 +16,11 @@ class ProjectModalContainer extends Component {
         users: [],
         roles: [],
         currentRoleId: null,
+        currentMemberId: null,
     }
 
     componentDidUpdate(prevProps) {
-        const { users, roles, createRole } = this.props;
+        const { users, roles, createRole, createAccount } = this.props;
         (() => {
             if (users.type === prevProps.users.type) return;
             if (users.type === GET_USERS_SUCCESS) {
@@ -40,22 +42,38 @@ class ProjectModalContainer extends Component {
         (() => {
             if (createRole.type === prevProps.createRole.type) return;
             if (createRole.type === CREATE_ROLE_SUCCESS) {
-                this.props.dispatch(getRoles());
                 const { id } = this.props.createRole.payload;
+                this.props.dispatch(getRoles());
 
                 this.setState({
                     currentRoleId: id
                 })
             };
         })();
-    }
+        (() => {
+            if (createAccount.type === prevProps.createAccount.type) return;
+            if (createAccount.type === CREATE_ACCOUNT_SUCCESS) {
+                const { id } = this.props.createAccount.payload;
 
-    onCreateProject = (project) => {
-        this.props.dispatch(createProject(project));
+                this.props.dispatch(getUsers());
+                this.setState({
+                    currentMemberId: id
+                })
+            };
+
+        })();
     }
 
     onCreateRole = (roleValue) => {
         this.props.dispatch(createRole({ name: roleValue }));
+    }
+
+    onCreateAccount = (values) => {
+        this.props.dispatch(createAccount(values))
+    }
+
+    onCreateProject = (project) => {
+        this.props.dispatch(createProject(project));
     }
 
     onUpdateProject = (project) => {
@@ -69,27 +87,30 @@ class ProjectModalContainer extends Component {
     };
 
     render() {
-        const { users, roles, currentRoleId } = this.state;
+        const { users, roles, currentRoleId, currentMemberId } = this.state;
         const {
             project,
             isUpdateProject,
             account
         } = this.props;
-        const { loading } = this.props.roles;
+        const { loading } = this.props.roles || this.props.createAccount;
 
         return (
             <ProjectModal
                 loading={loading}
-                currentRoleId={currentRoleId}
-                users={users}
-                allRoles={roles}
-                getData={this.getData}
-                onCreateRole={this.onCreateRole}
-                onCreateProject={this.onCreateProject}
-                onUpdateProject={this.onUpdateProject}
-                isUpdateProject={isUpdateProject}
                 project={project}
+                users={users}
                 account={account}
+                allRoles={roles}
+                currentRoleId={currentRoleId}
+                currentMemberId={currentMemberId}
+                isUpdateProject={isUpdateProject}
+                getData={this.getData}
+                onCreateAccount={this.onCreateAccount}
+                onCreateRole={this.onCreateRole}
+                onSuccess={isUpdateProject
+                    ? this.onUpdateProject
+                    : this.onCreateProject}
 
             />
         );
@@ -101,6 +122,7 @@ function mapStateToProps(state) {
         users: state.getUsers,
         roles: state.getRoles,
         createRole: state.createRole,
+        createAccount: state.createAccount,
         account: state.account.payload,
     }
 }

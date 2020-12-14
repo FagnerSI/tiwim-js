@@ -8,7 +8,7 @@
 }
 
 .topic-title {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   color: #333;
 }
@@ -34,15 +34,10 @@
 }
 
 .replays-title {
-  display: block;
   text-align: center;
   padding: 16px;
   font-weight: 600;
-  margin: -16px -16px 0 -16px;
-  background: #fff;
   color: rgba(0, 0, 0, 0.65);
-  box-shadow: 2px 2px 5px #0002;
-  border-bottom: 1px solid #0001;
 }
 
 .replays-container {

@@ -9,7 +9,7 @@ function* getProjects() {
         let { data } = yield call(api().get, `/projects`);
         yield put(success(data));
     } catch (error) {
-        yield put(failure("Nenhum Projeto foi encontrado!"));
+        yield put(failure("Nenhuma discussão foi encontrado!"));
     }
 }
 

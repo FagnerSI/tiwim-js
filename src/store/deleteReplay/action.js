@@ -4,7 +4,7 @@ export const DELETE_REPLAY_FAILURE = 'DELETE_REPLAY_FAILURE';
 export const DELETE_REPLAY_REQUEST = 'DELETE_REPLAY_REQUEST';
 
 export function success(payload) {
-    message.success(`Comentário removida com sucesso!`);
+    message.success(`Mensagem removida com sucesso!`);
     return { type: DELETE_REPLAY_SUCCESS, payload }
 }
 

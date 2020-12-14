@@ -3,12 +3,30 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 3.5rem;
-  font-size: 1.2rem;
-  font-weight: 600;
+  height: 4rem;
   padding: 10px 25px;
   color: #fff;
   background-color: #323234;
+}
+
+.header-logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-logo {
+  margin-top: -10px;
+  height: 60px;
+}
+
+.header-logo-subtitle {
+  font-size: 7px;
+  font-style: italic;
+  font-weight: 100;
+  margin-top: -20px;
+  margin-left: 40px;
 }
 
 .profile-container {

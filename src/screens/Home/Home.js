@@ -7,7 +7,6 @@ import { isEmpty } from 'underscore';
 import ProjectDetails from './ProjectDetails';
 import ProjectModal from './ProjectModal';
 import MainLayout from '~/components/MainLayout';
-import { Header } from '~/components';
 import './style.css';
 import 'antd/dist/antd.css';
 
@@ -15,9 +14,7 @@ type Props = {
   onloadProject: () => void,
   onCreateProject: () => void,
 }
-
 class Home extends Component<Props> {
-
   state = {
     current: '0',
     project: null,
@@ -35,7 +32,6 @@ class Home extends Component<Props> {
     }
 
     if (isUpdateProject !== this.props.isUpdateProject) {
-      console.log("====")
       this.setState({
         project: this.props.projects[this.state.current]
       }, () => this.props.getTopics(this.state.project.id))
@@ -54,7 +50,7 @@ class Home extends Component<Props> {
     return (
       <div className='project-header'>
         <ProjectModal />
-        <span style={{ padding: "0 10px" }}>Projetos</span>
+        <span style={{ padding: "0 10px" }}>Discussões</span>
       </div>
     );
   }
@@ -75,7 +71,7 @@ class Home extends Component<Props> {
                 <Menu.Item key={index}>{project.name}</Menu.Item>
               ))
             )
-            : <Empty className='empty-project' description="Você não possui projetos." />
+            : <Empty className='empty-project' description="Você não possui discussões." />
         }
       </Menu>
     )
@@ -83,7 +79,7 @@ class Home extends Component<Props> {
 
   renderRightHeader() {
     return (
-      <Header />
+      <span className="title_screen">DETALHES DA DISCUSSÃO</span>
     )
   }
 
@@ -94,7 +90,6 @@ class Home extends Component<Props> {
 
     return (
       <>
-        <span className="title_screen">DETALHES DO PROJETO</span>
         <ProjectDetails
           project={projectSelected}
         />

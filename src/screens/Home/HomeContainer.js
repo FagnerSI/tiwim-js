@@ -34,12 +34,13 @@ class HomeContainer extends Component {
         (() => {
             if (project.type === prevProps.project.type) return;
             if (project.type === CREATE_PROJECT_SUCCESS) {
-                this.onLoadProjects()
+                this.onLoadProjects();
             };
         })();
         (() => {
             if (updateProject.type === prevProps.updateProject.type) return;
             if (updateProject.type === UPDATE_PROJECT_REQUEST) {
+                this.onLoadProjects();
                 this.setState({
                     isUpdateProject: false
                 })

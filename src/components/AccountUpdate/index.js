@@ -36,10 +36,10 @@ class Account extends Component {
                         name,
                         email
                     })
-                    this.props.onClose();
+                    this.onCloseModal();
                 }
                 if (type === UPDATE_ACCOUNT_FAILURE) {
-                    this.props.onClose();
+                    this.onCloseModal();
                 }
             }
         })();

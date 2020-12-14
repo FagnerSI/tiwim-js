@@ -4,7 +4,7 @@ export const UPDATE_REPLAY_FAILURE = 'UPDATE_REPLAY_FAILURE';
 export const UPDATE_REPLAY_REQUEST = 'UPDATE_REPLAY_REQUEST';
 
 export function success(payload) {
-    message.success(`Comentário atualizado com sucesso.`);
+    message.success(`Mensagem atualizada com sucesso.`);
     return { type: UPDATE_REPLAY_SUCCESS, payload }
 }
 export function failure(error) {

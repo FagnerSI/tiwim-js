@@ -170,7 +170,7 @@ class TopicModal extends Component {
                     icon={topic ? "edit" : ""}
                     onClick={this.onOpenModal}
                 >
-                    {topic ? '' : 'Criar tópico'}
+                    {topic ? '' : 'Criar Tópico'}
                 </Button>
             </Tooltip>,
             <Modal

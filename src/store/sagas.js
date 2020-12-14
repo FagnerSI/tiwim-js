@@ -18,6 +18,7 @@ import updateProject from './updateProject/saga';
 import updateAccount from './updateAccount/saga';
 import updateReplay from './updateReplay/saga';
 import updateTopic from './updateTopic/saga';
+import getLastReplayOfUser from './getLastReplayOfUser/saga';
 
 export default function* rootSaga() {
     yield all([
@@ -39,5 +40,6 @@ export default function* rootSaga() {
         updateProject(),
         updateReplay(),
         updateTopic(),
+        getLastReplayOfUser(),
     ]);
 }

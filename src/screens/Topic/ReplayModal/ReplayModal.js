@@ -63,7 +63,19 @@ class ReplayModal extends Component {
     }
 
     onOpenModal = () => {
-        const { replay } = this.props;
+        const { replay, lastReplay } = this.props;
+        const roles_in = lastReplay && lastReplay.roles_in
+            ? String(lastReplay.roles_in) : null;
+
+        if (roles_in) {
+            this.setState({
+                roles_in
+            }, () =>
+                this.props.form.setFieldsValue({
+                    roles_in: this.state.roles_in
+                })
+            )
+        }
 
         if (replay) {
             const {
@@ -201,14 +213,12 @@ class ReplayModal extends Component {
                             }
                         >
                             {project.roles.map(item => {
-                                console.log("_----", typeof item.id)
                                 return <Option key={item.id}>{item.name}</Option>
                             }
                             )}
                         </Select>
                     )}
                 </Form.Item>
-
                 <Form.Item label="Descrição">
                     {getFieldDecorator('description', {
                         rules: [{ required: true, message: 'Digite uma descrição' }],
@@ -250,15 +260,15 @@ class ReplayModal extends Component {
                     type={replay ? "link" : "primary"}
                     onClick={this.onOpenModal}
                 >
-                    {replay ? "Editar" : "Comentar"}
+                    {replay ? "Editar" : "Enviar Mensagem"}
                 </Button>
                 <Modal
-                    title={replay ? "Atualizar Comentário" : "Criar Comentário"}
+                    title={replay ? "Atualizar Mensagem" : "Criar Mensagem"}
                     visible={this.state.visible}
                     maskClosable={false}
                     onCancel={this.onCloseModal}
                     onOk={this.onSubmit}
-                    okText={replay ? "Aatualizar Comentário" : 'Enviar Comentário'}
+                    okText={replay ? "Aatualizar Mensagem" : 'Enviar Mensagem'}
                     centered={true}
                 >
                     {this.renderForm()}
