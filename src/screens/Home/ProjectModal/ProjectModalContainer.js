@@ -1,7 +1,6 @@
 /* eslint-disable no-sequences */
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { message } from 'antd';
 import updateProject from '~/store/updateProject/action';
 import createProject from '~/store/createProject/action';
 import getUsers, { GET_USERS_SUCCESS } from '~/store/getUsers/action';

@@ -39,7 +39,7 @@ class ReplayModalContainer extends Component {
 
     onUpdateReplay = (replay) => {
         const { id } = this.props.replay;
-        this.props.dispatch(updateReplay({ ...replay, id, }));
+        this.props.dispatch(updateReplay({ ...replay, id }));
     }
 
     render() {

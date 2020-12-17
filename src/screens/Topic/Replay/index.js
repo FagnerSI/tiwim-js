@@ -16,6 +16,10 @@ export default class Replay extends Component {
         this.setState(({ showAllRoles }) => ({ showAllRoles: !showAllRoles }))
     }
 
+    onOpenImage = () => {
+        this.href.click();
+    }
+
     renderRolesFor() {
         const { roles_for } = this.props.replay;
         const isMoreRoles = roles_for.length > 1;
@@ -83,15 +87,30 @@ export default class Replay extends Component {
                     </div>
                     <div className="card-body">
                         <div className="desc">{replay.description}</div>
+                        {
+                            replay.image_details &&
+                            <>
+                                <img
+                                    onClick={this.onOpenImage}
+                                    className="image"
+                                    alt="descrição detalhada"
+                                    src={replay.image_details}
+                                />
+                                <a
+                                    ref={ref => this.href = ref}
+                                    href={replay.image_details}
+                                    target='_blank'
+                                    rel="noopener noreferrer"
+                                >
+                                    ver mais da descrição detalhada
+                                </a>
+                            </>
+
+
+                        }
                     </div>
                     <div className="card-footer">
                         <span>{`criado em ${moment(replay.created_at).format('DD/MM/YYYY')}`}</span>
-                        {
-                            replay.url_details &&
-                            <div className="link">
-                                <a href={replay.url_details}>Ver detalhamento</a>
-                            </div>
-                        }
                     </div>
                 </div>
             </div >
