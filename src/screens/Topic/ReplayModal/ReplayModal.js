@@ -7,6 +7,9 @@ import {
     Row,
     Col,
     Select,
+    Icon,
+    Typography,
+    Divider,
 } from 'antd';
 import 'antd/dist/antd.css';
 
@@ -43,23 +46,26 @@ const KIND_OF_SPEECH_CHOICES = [
 ]
 
 const initState = {
-    url_details: '',
+    image_details: '',
     description: '',
     kind_speech: '',
     roles_for: [],
     roles_in: '',
+    fileName: '',
+    loadingFile: false,
     visible: false,
 }
 
+const reader = new FileReader();
 class ReplayModal extends Component {
-
-    state = {
-        ...initState,
-    }
-
-    onChangeValue = (key) => (e) => {
-        const value = e && e.target ? e.target.value : e;
-        this.setState({ [key]: value })
+    constructor(props) {
+        super(props);
+        this.state = {
+            ...initState,
+        };
+        reader.onload = this.onLoadReader;
+        reader.onloadstart = this.onStartLoad;
+        reader.onloadend = this.onLoadend;
     }
 
     onOpenModal = () => {
@@ -79,7 +85,7 @@ class ReplayModal extends Component {
 
         if (replay) {
             const {
-                url_details,
+                image_details,
                 description,
                 kind_speech,
                 roles_for,
@@ -87,7 +93,7 @@ class ReplayModal extends Component {
             } = replay;
 
             this.setState({
-                url_details,
+                image_details,
                 description,
                 kind_speech,
                 roles_for,
@@ -95,7 +101,6 @@ class ReplayModal extends Component {
             },
                 () => {
                     this.props.form.setFieldsValue({
-                        url_details: this.state.url_details,
                         description: this.state.description,
                         kind_speech: this.state.kind_speech,
                         roles_for: getAtrrInArray('id', this.state.roles_for),
@@ -109,19 +114,51 @@ class ReplayModal extends Component {
         this.setState({ visible: true });
     }
 
+    onPress = (entry) => {
+        this.input.click();
+    };
+
+    onFileOk = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            this.setState({ fileName: file.name })
+            reader.readAsDataURL(file);
+        }
+    };
+
+    onLoadReader = (reader) => {
+        this.setState({ image_details: reader.target.result });
+    };
+
+    onStartLoad = () => {
+        this.setState({ loadingFile: true })
+    }
+
+    onLoadend = () => {
+        setTimeout(() => {
+            this.setState({ loadingFile: false })
+        }, 750);
+    }
+
     onCloseModal = () => {
         this.setState({ ...initState });
         this.props.form.resetFields()
     };
 
+    onChangeValue = (key) => (e) => {
+        const value = e && e.target ? e.target.value : e;
+        this.setState({ [key]: value })
+    }
+
 
     onSubmit = () => {
         this.props.form.validateFields((err, values) => {
             if (!err || isEmpty(err)) {
+                const { image_details } = this.state;
                 if (this.props.replay) {
-                    this.props.onUpdateReplay(values)
+                    this.props.onUpdateReplay({ ...values, image_details })
                 } else {
-                    this.props.onCreateReplay(values)
+                    this.props.onCreateReplay({ ...values, image_details })
                 }
 
                 this.onCloseModal();
@@ -133,6 +170,10 @@ class ReplayModal extends Component {
     renderForm() {
         const { form, project } = this.props;
         const { getFieldDecorator } = form;
+        const { fileName, loadingFile } = this.state;
+        const fileSelected = fileName && fileName.length >= 35
+            ? fileName.substring(0, 35)
+            : fileName;
 
         return (
             <Form colon={false}>
@@ -232,18 +273,32 @@ class ReplayModal extends Component {
                         />,
                     )}
                 </Form.Item>
-                <Form.Item label="Link para descrição detalhada">
-                    {getFieldDecorator('url_details', {
-                        rules: [{ message: 'Digite o link para descrição detalhada' }],
+                <Form.Item label="Descrição detalhada">
+                    <Button
+                        loading={loadingFile}
+                        onClick={this.onPress}
+                        icon='upload'
+                    >
+                        {loadingFile ? 'Carregando Imagem' : 'Selecionar Imagem'}
+                    </Button>
+                    {
+                        fileSelected
+                        && !loadingFile
+                        && <span>
+                            <Divider type="vertical" />
+                            <Icon type="paper-clip" />
+                            <Typography.Text strong>
+                                {fileSelected}
+                            </Typography.Text>
+                        </span>
                     }
-                    )(
-                        <TextArea
-                            name="url_description"
-                            placeholder="Link para a descrição detalhada"
-                            autosize={{ minRows: 1, maxRows: 3 }}
-                            onChange={this.onChangeValue('url_details')}
-                        />,
-                    )}
+                    <input
+                        style={{ display: 'none' }}
+                        ref={ref => this.input = ref}
+                        type="file"
+                        accept="image/*"
+                        onChange={this.onFileOk}
+                    />
                 </Form.Item>
             </Form >
         )
@@ -260,7 +315,7 @@ class ReplayModal extends Component {
                     type={replay ? "link" : "primary"}
                     onClick={this.onOpenModal}
                 >
-                    {replay ? "Editar" : "Enviar Mensagem"}
+                    {replay ? "Editar" : "Escrever Mensagem"}
                 </Button>
                 <Modal
                     title={replay ? "Atualizar Mensagem" : "Criar Mensagem"}
