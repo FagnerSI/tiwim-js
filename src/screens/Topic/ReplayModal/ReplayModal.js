@@ -85,7 +85,6 @@ class ReplayModal extends Component {
 
         if (replay) {
             const {
-                image_details,
                 description,
                 kind_speech,
                 roles_for,
@@ -93,7 +92,6 @@ class ReplayModal extends Component {
             } = replay;
 
             this.setState({
-                image_details,
                 description,
                 kind_speech,
                 roles_for,
@@ -114,9 +112,14 @@ class ReplayModal extends Component {
         this.setState({ visible: true });
     }
 
-    onPress = (entry) => {
+    onPress = () => {
         this.input.click();
     };
+
+    onClearImage = () => {
+        this.setState({ fileName: '', image_details: '' });
+        this.input.value = '';
+    }
 
     onFileOk = (event) => {
         const file = event.target.files[0];
@@ -155,10 +158,14 @@ class ReplayModal extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err || isEmpty(err)) {
                 const { image_details } = this.state;
+                const replay = image_details
+                    ? { ...values, image_details }
+                    : { ...values, }
+
                 if (this.props.replay) {
-                    this.props.onUpdateReplay({ ...values, image_details })
+                    this.props.onUpdateReplay(replay)
                 } else {
-                    this.props.onCreateReplay({ ...values, image_details })
+                    this.props.onCreateReplay(replay)
                 }
 
                 this.onCloseModal();
@@ -168,12 +175,13 @@ class ReplayModal extends Component {
     }
 
     renderForm() {
-        const { form, project } = this.props;
+        const { form, project, replay } = this.props;
         const { getFieldDecorator } = form;
         const { fileName, loadingFile } = this.state;
-        const fileSelected = fileName && fileName.length >= 35
-            ? fileName.substring(0, 35)
+        const fileSelected = fileName && fileName.length >= 30
+            ? fileName.substring(0, 30)
             : fileName;
+        const titleButtonFile = replay ? 'Substituir Imagem' : 'Selecionar Imagem';
 
         return (
             <Form colon={false}>
@@ -279,7 +287,7 @@ class ReplayModal extends Component {
                         onClick={this.onPress}
                         icon='upload'
                     >
-                        {loadingFile ? 'Carregando Imagem' : 'Selecionar Imagem'}
+                        {loadingFile ? 'Carregando Imagem' : titleButtonFile}
                     </Button>
                     {
                         fileSelected
@@ -290,6 +298,13 @@ class ReplayModal extends Component {
                             <Typography.Text strong>
                                 {fileSelected}
                             </Typography.Text>
+                            <Button
+                                type="danger"
+                                ghost
+                                icon="close"
+                                shape="circle"
+                                onClick={this.onClearImage}
+                            />
                         </span>
                     }
                     <input
@@ -306,7 +321,6 @@ class ReplayModal extends Component {
 
     render() {
         const { replay } = this.props;
-
         return (
             <>
                 <Button
