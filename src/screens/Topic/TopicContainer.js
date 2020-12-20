@@ -61,14 +61,16 @@ class TopicContainer extends Component {
 
     render() {
         const { loading } = this.props.replays;
-        const deleteReplayloading = this.props.removeReplay.loading;
+        const replayActionsloading = this.props.removeReplay.loading
+            || this.props.createReplay.loading
+            || this.props.updateReplay.loading
 
         return (
             <Topic
                 {...this.props}
                 loading={loading}
-                deleteReplayloading={deleteReplayloading}
-                loadReplays={this.loadReplays}
+                replayActionsloading={replayActionsloading}
+                onLoadReplays={this.loadReplays}
                 replays={this.state.replays}
                 removeReplay={this.removeReplay}
             />

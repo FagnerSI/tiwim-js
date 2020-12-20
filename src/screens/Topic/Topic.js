@@ -87,16 +87,16 @@ class Topic extends Component {
   }
 
   rightChild() {
-    const { loadReplays, deleteReplayloading } = this.props;
+    const { replayActionsloading } = this.props;
 
     return (
       <>
         <div className="replays-container">
-          {deleteReplayloading
+          {replayActionsloading
             ? <Spin size="large" />
             : this.renderReplay()
           }
-          <Tooltip title="Atualizar mensagem" placement="left">
+          {/* <Tooltip title="Atualizar mensagem" placement="left">
             <Button
               size="large"
               type="primary"
@@ -105,7 +105,7 @@ class Topic extends Component {
               className="btn-sync"
               onClick={loadReplays}
             />
-          </Tooltip>
+          </Tooltip> */}
         </div>
       </>
     )
