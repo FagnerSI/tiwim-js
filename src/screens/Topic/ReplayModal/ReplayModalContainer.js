@@ -13,7 +13,8 @@ class ReplayModalContainer extends Component {
     }
 
     componentDidMount() {
-        this.props.dispatch(getLastReplay());
+        const { id } = this.props.topic;
+        this.props.dispatch(getLastReplay(id));
     }
 
     componentDidUpdate({ lastReplay }) {

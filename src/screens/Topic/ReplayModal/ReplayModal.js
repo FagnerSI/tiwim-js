@@ -19,6 +19,7 @@ import getAtrrInArray from '~/common/getAtrrInArray';
 
 const { TextArea } = Input;
 const { Option } = Select;
+const allRoles = { id: 'All', name: 'Todos os papeis' };
 
 const KIND_OF_SPEECH_CHOICES = [
     { key: 'PE', text: 'Pergunto' },
@@ -49,7 +50,7 @@ const initState = {
     image_details: '',
     description: '',
     kind_speech: '',
-    roles_for: [],
+    roles_for: [allRoles.id],
     roles_in: '',
     fileName: '',
     loadingFile: false,
@@ -68,10 +69,22 @@ class ReplayModal extends Component {
         reader.onloadend = this.onLoadend;
     }
 
+    setRolesForState = (roles_for = ['All']) => {
+        this.setState({
+            roles_for
+        }, () =>
+            this.props.form.setFieldsValue({
+                roles_for
+            })
+        )
+    }
+
     onOpenModal = () => {
-        const { replay, lastReplay } = this.props;
+        const { replay, lastReplay, project } = this.props;
         const roles_in = lastReplay && lastReplay.roles_in
-            ? String(lastReplay.roles_in) : null;
+            ? `${lastReplay.roles_in}` : null;
+
+        this.setRolesForState();
 
         if (roles_in) {
             this.setState({
@@ -91,17 +104,23 @@ class ReplayModal extends Component {
                 roles_in,
             } = replay;
 
+            const rolesFor = roles_for
+                && project
+                && roles_for.length === project.roles.length
+                ? [allRoles.id]
+                : getAtrrInArray('id', roles_for);
+
             this.setState({
                 description,
                 kind_speech,
-                roles_for,
+                roles_for: rolesFor,
                 roles_in
             },
                 () => {
                     this.props.form.setFieldsValue({
                         description: this.state.description,
                         kind_speech: this.state.kind_speech,
-                        roles_for: getAtrrInArray('id', this.state.roles_for),
+                        roles_for: rolesFor,
                         roles_in: String(this.state.roles_in.id)
                     })
                 }
@@ -150,17 +169,51 @@ class ReplayModal extends Component {
 
     onChangeValue = (key) => (e) => {
         const value = e && e.target ? e.target.value : e;
-        this.setState({ [key]: value })
+        this.setState({ [key]: value },
+            () => {
+                if (key === 'roles_for') {
+                    this.onCheckSelectRolesFor();
+                }
+            }
+        )
+    }
+
+    onCheckSelectRolesFor = () => {
+        const { roles_for } = this.state;
+        const { project } = this.props;
+        /*   
+            If list of roles has more than one item,
+            verify if one of them is "All" and remove
+        */
+        if (roles_for && project && project.roles) {
+            if (roles_for.length
+                //&& roles_for.length !== project.roles.length
+            ) {
+                const rolesFor = roles_for.filter(item => item !== allRoles.id);
+                this.setRolesForState(rolesFor);
+                return;
+            }
+            else {
+                this.setRolesForState();
+            }
+        }
     }
 
 
     onSubmit = () => {
         this.props.form.validateFields((err, values) => {
+
             if (!err || isEmpty(err)) {
-                const { image_details } = this.state;
+                const { image_details, roles_for } = this.state;
+
+                //If selected option is "All", then add all roles
+                const rolesFor = roles_for[0] === allRoles.id
+                    ? getAtrrInArray('id', this.props.project.roles)
+                    : roles_for;
+
                 const replay = image_details
-                    ? { ...values, image_details }
-                    : { ...values, }
+                    ? { ...values, roles_for: rolesFor, image_details }
+                    : { ...values, roles_for: rolesFor }
 
                 if (this.props.replay) {
                     this.props.onUpdateReplay(replay)
@@ -182,6 +235,7 @@ class ReplayModal extends Component {
             ? fileName.substring(0, 30)
             : fileName;
         const titleButtonFile = replay ? 'Substituir Imagem' : 'Selecionar Imagem';
+        const roles = [...project.roles, allRoles];
 
         return (
             <Form colon={false}>
@@ -261,8 +315,8 @@ class ReplayModal extends Component {
                                 Search(input, option.props.children)
                             }
                         >
-                            {project.roles.map(item => {
-                                return <Option key={item.id}>{item.name}</Option>
+                            {roles.map(item => {
+                                return <Option key={item.id} disabled={item.id === allRoles.id}>{item.name}</Option>
                             }
                             )}
                         </Select>
