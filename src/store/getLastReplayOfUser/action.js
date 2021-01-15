@@ -12,6 +12,6 @@ export function failure(error) {
     return { type: GET_LAST_REPLAY_USER_FAILURE, payload: error }
 }
 
-export default function get(projectId) {
-    return { type: GET_LAST_REPLAY_USER_REQUEST, payload: projectId }
+export default function get(topicId) {
+    return { type: GET_LAST_REPLAY_USER_REQUEST, payload: topicId }
 }
