@@ -5,6 +5,8 @@ import getReplays, { GET_REPLAYS_TOPIC_SUCCESS } from '~/store/getReplaysOfTopic
 import deleteReplay, { DELETE_REPLAY_SUCCESS } from '~/store/deleteReplay/action';
 import { CREATE_REPLAY_SUCCESS } from '~/store/createReplay/action';
 import { UPDATE_REPLAY_SUCCESS } from '~/store/updateReplay/action';
+import findReplays, { FILTER_REPLAYS_SUCCESS } from '~/store/filterReplaysOfTopic/action';
+
 
 class TopicContainer extends Component {
     state = {
@@ -15,12 +17,27 @@ class TopicContainer extends Component {
         this.loadReplays();
     }
 
-    componentDidUpdate({ replays, createReplay, removeReplay, updateReplay }) {
+    componentDidUpdate({
+        replays,
+        createReplay,
+        removeReplay,
+        updateReplay,
+        filter,
+    }) {
         (() => {
             const { type } = this.props.replays;
             if (replays.type !== type) {
                 if (type === GET_REPLAYS_TOPIC_SUCCESS) {
                     this.setState({ replays: this.props.replays.payload })
+                }
+            }
+        })();
+        (() => {
+            const { type } = this.props.filter;
+
+            if (filter.type !== type) {
+                if (type === FILTER_REPLAYS_SUCCESS) {
+                    this.setState({ replays: this.props.filter.payload })
                 }
             }
         })();
@@ -50,6 +67,18 @@ class TopicContainer extends Component {
         })();
     }
 
+    searchReplay = (kind_speech, roles_in, roles_for) => {
+        const { topic, dispatch } = this.props;
+        dispatch(
+            findReplays({
+                id: topic.id,
+                kind_speech,
+                roles_in,
+                roles_for
+            })
+        );
+    }
+
     loadReplays = () => {
         const { topic, dispatch } = this.props;
         dispatch(getReplays(topic.id));
@@ -60,18 +89,18 @@ class TopicContainer extends Component {
     }
 
     render() {
-        const { loading } = this.props.replays;
         const replayActionsloading = this.props.removeReplay.loading
             || this.props.createReplay.loading
             || this.props.updateReplay.loading
+            || this.props.replays.loading
 
         return (
             <Topic
                 {...this.props}
-                loading={loading}
                 replayActionsloading={replayActionsloading}
-                onLoadReplays={this.loadReplays}
                 replays={this.state.replays}
+                onLoadReplays={this.loadReplays}
+                searchReplay={this.searchReplay}
                 removeReplay={this.removeReplay}
             />
         );
@@ -85,6 +114,7 @@ function mapStateToProps(state) {
         removeReplay: state.deleteReplay,
         createReplay: state.createReplay,
         account: state.account,
+        filter: state.filterReplaysOfTopic
     }
 }
 

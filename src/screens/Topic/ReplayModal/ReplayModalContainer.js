@@ -23,9 +23,9 @@ class ReplayModalContainer extends Component {
             if (lastReplay.type !== type) {
                 if (type === GET_LAST_REPLAY_USER_SUCCESS) {
                     const { payload } = this.props.lastReplay;
-                    if (payload && payload.length) {
+                    if (payload) {
                         this.setState({
-                            lastReplayUser: payload[0],
+                            lastReplayUser: payload,
                         })
                     }
                 }

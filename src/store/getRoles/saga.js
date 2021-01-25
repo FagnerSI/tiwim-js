@@ -9,7 +9,7 @@ function* getRoles() {
         let { data } = yield call(api().get, `/roles`);
         yield put(success(data));
     } catch (error) {
-        yield put(failure("Erro ou tentar encontrar papeis!"));
+        yield put(failure("Erro ou tentar encontrar papéis!"));
     }
 }
 

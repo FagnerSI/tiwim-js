@@ -1,18 +1,73 @@
 import React, { Component } from 'react';
 import Text from 'react-format-text';
-import { Button, Tooltip, Spin, Empty } from 'antd';
+import {
+  Button,
+  Tooltip,
+  Spin,
+  Empty,
+  Modal,
+  Select,
+  Form,
+} from 'antd';
+import Search from '~/common/SearchField';
+import KIND_OF_SPEECH_CHOICES from '~/common/kindSpeechsSelect';
 import moment from 'moment';
 import 'moment/locale/pt-br';
-import { MainLayout, } from '~/components';
+import { MainLayout } from '~/components';
 import Replay from './Replay';
 import ReplayModal from './ReplayModal';
 import './style.css';
 
+const { Option } = Select;
+
+const initState = {
+  kind_speech: undefined,
+  roles_in: undefined,
+  roles_for: undefined,
+}
 class Topic extends Component {
   state = {
     current: 0,
-    visible: false,
+    visibleFilter: false,
+    isFilter: false,
+    ...initState,
   };
+
+  onToggleVisibleFilter = () => {
+    this.setState(
+      ({ visibleFilter }) => ({ visibleFilter: !visibleFilter }))
+  }
+
+  onToggleVisibleIsFilter = () => {
+    this.setState(
+      ({ isFilter }) => ({
+        isFilter: !isFilter,
+        ...initState,
+      }),
+      () => {
+        if (!this.state.isFilter) {
+          this.props.onLoadReplays()
+        }
+      }
+    )
+  }
+
+  onChangeValue = (field) => (e) => {
+    const value = e && e.target ? e.target.value : e;
+    this.setState({ [field]: value })
+  }
+
+  submitFilter = () => {
+    const {
+      kind_speech,
+      roles_in,
+      roles_for,
+    } = this.state;
+
+    this.setState({ isFilter: true })
+    this.props.searchReplay(kind_speech, roles_in, roles_for);
+    this.onToggleVisibleFilter();
+  }
 
   renderLeftHeader() {
     const { history } = this.props;
@@ -54,7 +109,30 @@ class Topic extends Component {
 
   renderRightHeader() {
     return (
-      <span className="replays-title">MENSAGENS</span>
+      <>
+        <span className="replays-title">MENSAGENS</span>
+        <div className="filter">
+          {
+            this.state.isFilter
+            && <Button
+              icon="close"
+              type="danger"
+              onClick={this.onToggleVisibleIsFilter}
+              ghost
+            >
+              Limpar Filtros
+        </Button>
+          }
+          <Button
+            type="primary"
+            icon="filter"
+            onClick={this.onToggleVisibleFilter}
+            ghost
+          >
+            Filtrar
+        </Button>
+        </div>
+      </>
     )
   }
 
@@ -80,7 +158,7 @@ class Topic extends Component {
         ))
         : (
           <div className="empty-container">
-            <Empty className="empty" description="Esse tópico não possui mensagens!" />
+            <Empty className="empty" description={this.state.isFilter ? "Não possui mensagens!" : "Esse tópico não possui mensagens!"} />
           </div>
         )
     )
@@ -111,18 +189,87 @@ class Topic extends Component {
     )
   }
 
+  renderForm() {
+    const { roles } = this.props.project;
+    const { kind_speech, roles_in, roles_for } = this.state;
+
+    return (
+      <Form colon={false}>
+        <Form.Item label="Tipo de fala">
+          <Select
+            allowClear
+            placeholder="Selecione o tipo de fala"
+            onChange={this.onChangeValue('kind_speech')}
+            value={kind_speech}
+            showSearch
+            optionFilterProp='children'
+            filterOption={(input, option) =>
+              Search(input, option.props.children)
+            }
+          >
+            {KIND_OF_SPEECH_CHOICES.map(
+              item => <Option key={item.key}>{item.text}</Option>
+            )}
+          </Select>
+        </Form.Item>
+        <Form.Item label="No papel">
+          <Select
+            allowClear
+            showArrow
+            placeholder="Selecione um papel"
+            onChange={this.onChangeValue('roles_in')}
+            value={roles_in}
+            showSearch
+            optionFilterProp='children'
+            filterOption={(input, option) =>
+              Search(input, option.props.children)
+            }
+          >
+            {roles.map(item => <Option key={item.id}>{item.name}</Option>)}
+          </Select>
+        </Form.Item>
+        <Form.Item label="Para o papel">
+          <Select
+            allowClear
+            showArrow
+            placeholder="Selecione um papel"
+            onChange={this.onChangeValue('roles_for')}
+            showSearch
+            value={roles_for}
+            optionFilterProp='children'
+            filterOption={(input, option) =>
+              Search(input, option.props.children)
+            }
+          >
+            {roles.map(item => <Option key={item.id}>{item.name}</Option>)}
+          </Select>
+        </Form.Item>
+      </Form>
+    );
+  }
+
   render() {
-    const { topic, loading } = this.props;
+    const { topic } = this.props;
+    const { visibleFilter } = this.state;
     if (!topic) return null;
 
     return (
-      <MainLayout
-        leftHeader={this.renderLeftHeader()}
-        leftChild={this.renderLeftChild()}
-        rightHeader={this.renderRightHeader()}
-        rightChild={this.rightChild()}
-        loading={loading}
-      />
+      <>
+        <MainLayout
+          leftHeader={this.renderLeftHeader()}
+          leftChild={this.renderLeftChild()}
+          rightHeader={this.renderRightHeader()}
+          rightChild={this.rightChild()}
+        />
+        <Modal
+          visible={visibleFilter}
+          okText="Filtrar"
+          onOk={this.submitFilter}
+          onCancel={this.onToggleVisibleFilter}
+        >
+          {this.renderForm()}
+        </Modal>
+      </>
     );
   }
 }

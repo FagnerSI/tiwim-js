@@ -101,14 +101,14 @@ class Roles extends Component<>{
                             <>
 
                                 <Form colon={false}>
-                                    <Form.Item label="Selecione Papeis">
+                                    <Form.Item label="Selecione Papéis">
                                         <Select
                                             allowClear
                                             mode="multiple"
                                             value={roles}
                                             showArrow={true}
                                             style={{ width: '100%' }}
-                                            placeholder="Selecione papeis para discussão"
+                                            placeholder="Selecione papéis para discussão"
                                             onChange={this.onChangeValue('roles')}
                                             showSearch
                                             optionFilterProp='children'
