@@ -8,7 +8,8 @@ function MainLayout(props) {
   const { leftHeader, leftChild, rightHeader, rightChild, loading } = props;
 
   return (
-    <>
+    <div className="main-container">
+      <Header />
       {
         loading
           ? (
@@ -18,30 +19,27 @@ function MainLayout(props) {
           )
           :
           (
-            <div className="main-container">
-              <Header />
-              <div className="main-content">
-                <div className="left-container">
-                  <div className="left-header">
-                    {leftHeader}
-                  </div>
-                  <div className="left-child">
-                    {leftChild}
-                  </div>
+            <div className="main-content">
+              <div className="left-container">
+                <div className="left-header">
+                  {leftHeader}
                 </div>
-                <div className="right-container">
-                  <div className="rigth-header">
-                    {rightHeader}
-                  </div>
-                  <div className="right-child">
-                    {rightChild}
-                  </div>
+                <div className="left-child">
+                  {leftChild}
+                </div>
+              </div>
+              <div className="right-container">
+                <div className="rigth-header">
+                  {rightHeader}
+                </div>
+                <div className="right-child">
+                  {rightChild}
                 </div>
               </div>
             </div>
           )
       }
-    </>
+    </div>
   );
 }
 export default MainLayout;

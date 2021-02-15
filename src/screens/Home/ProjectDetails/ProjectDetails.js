@@ -180,7 +180,7 @@ class ProjectDetails extends Component {
                 component: this.renderMembers(),
             },
             {
-                title: "Papeis",
+                title: "Papéis",
                 component: this.renderTags(),
             },
         ]

@@ -24,7 +24,7 @@ const steps = [
         component: 'BASIC',
     },
     {
-        title: 'Adicionar papeis',
+        title: 'Adicionar papéis',
         component: 'ROLES',
     },
     {

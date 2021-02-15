@@ -19,6 +19,7 @@ import updateAccount from './updateAccount/saga';
 import updateReplay from './updateReplay/saga';
 import updateTopic from './updateTopic/saga';
 import getLastReplayOfUser from './getLastReplayOfUser/saga';
+import filterReplaysOfTopic from './filterReplaysOfTopic/saga';
 
 export default function* rootSaga() {
     yield all([
@@ -30,6 +31,7 @@ export default function* rootSaga() {
         createRole(),
         deleteReplay(),
         getReplaysOfTopic(),
+        filterReplaysOfTopic(),
         deleteProject(),
         deleteTopic(),
         getProjects(),
